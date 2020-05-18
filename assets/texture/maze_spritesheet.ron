@@ -1,0 +1,78 @@
+List((
+	texture_width: 2504,
+	texture_height: 2486,
+	sprites: [
+		(
+			x: 0,
+			y: 0,
+			width: 1920,
+			height: 1080
+		),
+		(
+			x: 1920,
+			y: 0,
+			width: 211,
+			height: 922
+		),
+		(
+			x: 2131,
+			y: 0,
+			width: 211,
+			height: 922
+		),
+		(
+			x: 0,
+			y: 1080,
+			width: 1502,
+			height: 722
+		),
+		(
+			x: 1502,
+			y: 1080,
+			width: 501,
+			height: 722
+		),
+		(
+			x: 2003,
+			y: 1080,
+			width: 501,
+			height: 722
+		),
+		(
+			x: 0,
+			y: 1802,
+			width: 922,
+			height: 442
+		),
+		(
+			x: 922,
+			y: 1802,
+			width: 711,
+			height: 442
+		),
+		(
+			x: 1633,
+			y: 1802,
+			width: 711,
+			height: 442
+		),
+		(
+			x: 0,
+			y: 2244,
+			width: 502,
+			height: 242
+		),
+		(
+			x: 502,
+			y: 2244,
+			width: 646,
+			height: 242
+		),
+		(
+			x: 1148,
+			y: 2244,
+			width: 646,
+			height: 242
+		),
+	]
+))

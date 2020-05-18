@@ -1,9 +1,9 @@
+mod color;
 //mod audio;
 mod dungeon;
-//mod systems;
+mod systems;
 
 use amethyst::{
-	audio::{AudioBundle, DjSystemDesc},
 	core::transform::TransformBundle,
 	input::{InputBundle, StringBindings},
 	prelude::*,
@@ -17,6 +17,7 @@ use amethyst::{
 };
 
 //use crate::audio::Music;
+use crate::color::to_linear_rgba;
 use crate::dungeon::Dungeon;
 
 
@@ -38,12 +39,7 @@ fn main() -> amethyst::Result<()> {
 				// The RenderToWindow plugin provides all the scaffolding for opening a window an drawing on it.
 				.with_plugin(
 					RenderToWindow::from_config_path(display_config_path)?
-						.with_clear([
-							// Linear colorspace for #232629
-							f32::powf((35.0 / 255.0 + 0.055) / 1.055, 2.4), // R 
-							f32::powf((38.0 / 255.0 + 0.055) / 1.055, 2.4), // G
-							f32::powf((41.0 / 255.0 + 0.055) / 1.055, 2.4), // B
-							1.0])                                           // A
+						.with_clear(to_linear_rgba([35.0, 38.0, 41.0, 1.0])) // #232629
 				)
 				// The RenderFlat2D plugin is used to render entities with a 'SpriteRender' component.
 				.with_plugin(RenderFlat2D::default())
@@ -62,7 +58,7 @@ fn main() -> amethyst::Result<()> {
 //		.with(systems::PaddleSystem,       "paddle_system", &["input_system"])
 //		.with(systems::MoveBallsSystem,      "ball_system", &[])
 //		.with(systems::BounceSystem,    "collision_system", &["paddle_system", "ball_system"])
-//		.with(systems::WinnerSystem,       "winner_system", &["ball_system"])
+		.with(systems::WallsSystem, "walls_system", &[])
 		;
 	
 	let mut game = Application::new(assets_dir, Dungeon::default(), game_data)?;
