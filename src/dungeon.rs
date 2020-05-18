@@ -72,11 +72,11 @@ pub enum WallPart {
 
 pub struct Wall {
 	pub part:  WallPart,
-	pub depth: usize
+	pub depth: u8
 }
 
 impl Wall {
-	fn new(part: WallPart, depth: usize) -> Wall {
+	fn new(part: WallPart, depth: u8) -> Wall {
 		Wall {
 			part,
 			depth
@@ -88,7 +88,7 @@ impl Component for Wall {
 	type Storage = DenseVecStorage<Self>;
 }
 
-fn initialize_wall(world: &mut World, part: WallPart, depth: usize, trans_x: f32, trans_y: f32, trans_z: f32, sprite_sheet_handle: Handle<SpriteSheet>, sprite_index: usize) {
+fn initialize_wall(world: &mut World, part: WallPart, depth: u8, trans_x: f32, trans_y: f32, trans_z: f32, sprite_sheet_handle: Handle<SpriteSheet>, sprite_index: usize) {
 	let mut transform = Transform::default();
 	transform.set_translation_xyz(trans_x, trans_y, trans_z);
 	
@@ -107,7 +107,7 @@ fn initialize_wall(world: &mut World, part: WallPart, depth: usize, trans_x: f32
 }
 
 fn initialize_walls(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
-	let vert_center = 0.0;
+	let vert_center  = 0.0;
 	let horiz_center = 0.0;
 	
 	initialize_wall(world, WallPart::Left,  3, -(WORLD_WIDTH - WALL_SIDE4_WIDTH) * 0.5 + WALL_SIDE4_OFFSET, vert_center, 1.0, sprite_sheet_handle.clone(), SPRITE_LEFT4 );
@@ -128,10 +128,10 @@ fn initialize_walls(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>)
 
 
 // ===== Maze =====
-pub const BLOCK_EMPTY:   usize = 0;
-pub const BLOCK_WALL:    usize = 1;
-pub const BLOCK_OUTPUT:  usize = 2;
-pub const BLOCK_INVALID: usize = 999;
+pub const BLOCK_EMPTY:   u8 = 0;
+pub const BLOCK_WALL:    u8 = 1;
+pub const BLOCK_OUTPUT:  u8 = 2;
+pub const BLOCK_INVALID: u8 = 255;
 
 #[derive(Copy,Clone,Debug)]
 pub enum Orientation {
@@ -142,10 +142,10 @@ pub enum Orientation {
 }
 
 pub struct Maze {
-	height: usize,
-	width: usize,
-	blocks: [usize; 100],
-	start_position: [usize; 2],
+	height: u32,
+	width: u32,
+	blocks: [u8; 100],
+	start_position: [u32; 2],
 	start_orientation: Orientation
 }
 
@@ -174,53 +174,63 @@ impl std::default::Default for Maze {
 
 
 impl Maze {
-	pub fn view_from(&self, position: [usize; 2], orientation: Orientation) -> [usize; 12] {
-		let pos_x = position[0];
-		let pos_y = position[1];
+	pub fn view_from(&self, position: [u32; 2], orientation: Orientation) -> [u8; 12] {
+		let pos_x = position[0] as i64;
+		let pos_y = position[1] as i64;
 		
 		let mut view = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ];
 		
 		for i in 0..=2 {
 			for j in 0..=3 {
 				let (x, y) = match orientation {
-					Orientation::North => ( pos_x + i - 1  ,  pos_y - j     ),
-					Orientation::East  => ( pos_x + j      ,  pos_y + i - 1 ),
-					Orientation::South => ( pos_x - i + 1  ,  pos_y + j     ),
-					Orientation::West  => ( pos_x - j      ,  pos_y - i + 1 )
+					Orientation::North => ( pos_x.checked_add(i - 1)  ,  pos_y.checked_sub(j)     ),
+					Orientation::East  => ( pos_x.checked_add(j)      ,  pos_y.checked_add(i - 1) ),
+					Orientation::South => ( pos_x.checked_sub(i - 1)  ,  pos_y.checked_add(j)     ),
+					Orientation::West  => ( pos_x.checked_sub(j)      ,  pos_y.checked_sub(i - 1) )
  				};
-	
-				view[i + 3*j] = self.block_at([x, y]);
+ 				
+ 				if let (Some(x), Some(y)) = (x, y) {
+					if x >= 0 && x < (self.width as i64) && y >= 0 && y < (self.height as i64) {
+						view[(i + 3*j) as usize] = self.block_at([x as u32, y as u32]);
+					}
+					else {
+						view[(i + 3*j) as usize] = BLOCK_INVALID;
+					}
+ 				}
+ 				else {
+					view[(i + 3*j) as usize] = BLOCK_INVALID;
+				}
 			}
 		}
 		
 		view
 	}
 	
-	pub fn is_empty(&self, position: [usize; 2]) -> bool {
+	pub fn is_empty(&self, position: [u32; 2]) -> bool {
 		self.block_at(position) == BLOCK_EMPTY
 	}
 	
-	pub fn is_wall(&self, position: [usize; 2]) -> bool {
+	pub fn is_wall(&self, position: [u32; 2]) -> bool {
 		self.block_at(position) == BLOCK_WALL
 	}
 	
-	pub fn is_output(&self, position: [usize; 2]) -> bool {
+	pub fn is_output(&self, position: [u32; 2]) -> bool {
 		self.block_at(position) == BLOCK_OUTPUT
 	}
 	
-	fn block_at(&self, position: [usize; 2]) -> usize {
+	fn block_at(&self, position: [u32; 2]) -> u8 {
 		let pos_x = position[0];
 		let pos_y = position[1];
 		
 		if self.position_is_valid(position) {
-			self.blocks[pos_x + pos_y * self.width]
+			self.blocks[(pos_x + pos_y * self.width) as usize]
 		}
 		else {
 			BLOCK_INVALID
 		}
 	}
 	
-	fn position_is_valid(&self, position: [usize; 2]) -> bool {
+	fn position_is_valid(&self, position: [u32; 2]) -> bool {
 		let pos_x = position[0];
 		let pos_y = position[1];
 		

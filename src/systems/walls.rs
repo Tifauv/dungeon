@@ -24,20 +24,20 @@ impl<'s> System<'s> for WallsSystem {
 	fn run(&mut self, (players, transforms, walls, mut hidden, maze, entities): Self::SystemData) {
 		for (player, transform) in (&players, &transforms).join() {
 			// Get the player position & orientation
-			let player_x = transform.translation().x as usize;
-			let player_y = transform.translation().y as usize;
+			let player_x = transform.translation().x as u32;
+			let player_y = transform.translation().y as u32;
 
 			// Get what the player views of the maze
 			let player_view = maze.view_from([player_x, player_y], player.orientation);
 		
 			for (wall, entity) in (&walls, &entities).join() {
-				let wall_section: usize = match wall.part {
+				let wall_section: u8 = match wall.part {
 					WallPart::Left  => 0,
 					WallPart::Front => 1,
 					WallPart::Right => 2
 				};
 
-				if player_view[wall_section + 3*wall.depth] == BLOCK_WALL {
+				if player_view[(wall_section + 3*wall.depth) as usize] == BLOCK_WALL {
 					hidden.remove(entity);
 				}
 				else {
