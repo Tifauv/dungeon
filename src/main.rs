@@ -58,7 +58,8 @@ fn main() -> amethyst::Result<()> {
 //		.with(systems::PaddleSystem,       "paddle_system", &["input_system"])
 //		.with(systems::MoveBallsSystem,      "ball_system", &[])
 //		.with(systems::BounceSystem,    "collision_system", &["paddle_system", "ball_system"])
-		.with(systems::WallsSystem, "walls_system", &[])
+		.with(systems::MovePlayerSystem, "player_system", &["input_system"])
+		.with(systems::WallsSystem,      "walls_system",  &["player_system"])
 		;
 	
 	let mut game = Application::new(assets_dir, Dungeon::default(), game_data)?;

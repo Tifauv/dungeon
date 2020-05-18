@@ -248,6 +248,24 @@ impl Player {
 			orientation
 		}
 	}
+	
+	pub fn turn_clockwise(&mut self) {
+		self.orientation = match self.orientation {
+			Orientation::East  => Orientation::South,
+			Orientation::North => Orientation::East,
+			Orientation::West  => Orientation::North,
+			Orientation::South => Orientation::West
+		}
+	}
+	
+	pub fn turn_counter_clockwise(&mut self) {
+		self.orientation = match self.orientation {
+			Orientation::East  => Orientation::North,
+			Orientation::North => Orientation::West,
+			Orientation::West  => Orientation::South,
+			Orientation::South => Orientation::East
+		}
+	}
 }
 
 impl Component for Player {
