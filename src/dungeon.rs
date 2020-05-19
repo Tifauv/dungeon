@@ -128,9 +128,9 @@ fn initialize_walls(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>)
 
 
 // ===== Maze =====
-pub const BLOCK_EMPTY:   u8 = 0;
+pub const BLOCK_NONE:    u8 = 0;
 pub const BLOCK_WALL:    u8 = 1;
-pub const BLOCK_OUTPUT:  u8 = 2;
+pub const BLOCK_OUT:     u8 = 2;
 pub const BLOCK_INVALID: u8 = 255;
 
 #[derive(Copy,Clone,Debug)]
@@ -155,16 +155,16 @@ impl std::default::Default for Maze {
 			height: 10,
 			width: 10,
 			blocks: [
-				1, 1, 1, 1, 1, 2, 1, 1, 1, 1,
-				1, 1, 0, 0, 0, 0, 1, 0, 0, 1,
-				1, 0, 0, 1, 1, 1, 1, 1, 0, 1,
-				1, 0, 1, 0, 0, 0, 0, 1, 0, 1,
-				1, 0, 0, 0, 1, 1, 0, 1, 0, 1,
-				1, 1, 0, 1, 0, 0, 0, 1, 0, 1,
-				1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
-				1, 0, 1, 0, 1, 0, 0, 1, 0, 1,
-				1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
-				1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+				BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_OUT , BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL,
+				BLOCK_WALL, BLOCK_WALL, BLOCK_NONE, BLOCK_NONE, BLOCK_NONE, BLOCK_NONE, BLOCK_WALL, BLOCK_NONE, BLOCK_NONE, BLOCK_WALL,
+				BLOCK_WALL, BLOCK_NONE, BLOCK_NONE, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_NONE, BLOCK_WALL,
+				BLOCK_WALL, BLOCK_NONE, BLOCK_WALL, BLOCK_NONE, BLOCK_NONE, BLOCK_NONE, BLOCK_NONE, BLOCK_WALL, BLOCK_NONE, BLOCK_WALL,
+				BLOCK_WALL, BLOCK_NONE, BLOCK_NONE, BLOCK_NONE, BLOCK_WALL, BLOCK_WALL, BLOCK_NONE, BLOCK_WALL, BLOCK_NONE, BLOCK_WALL,
+				BLOCK_WALL, BLOCK_WALL, BLOCK_NONE, BLOCK_WALL, BLOCK_NONE, BLOCK_NONE, BLOCK_NONE, BLOCK_WALL, BLOCK_NONE, BLOCK_WALL,
+				BLOCK_WALL, BLOCK_NONE, BLOCK_NONE, BLOCK_WALL, BLOCK_WALL, BLOCK_NONE, BLOCK_WALL, BLOCK_NONE, BLOCK_NONE, BLOCK_WALL,
+				BLOCK_WALL, BLOCK_NONE, BLOCK_WALL, BLOCK_NONE, BLOCK_WALL, BLOCK_NONE, BLOCK_NONE, BLOCK_WALL, BLOCK_NONE, BLOCK_WALL,
+				BLOCK_WALL, BLOCK_NONE, BLOCK_NONE, BLOCK_NONE, BLOCK_NONE, BLOCK_WALL, BLOCK_NONE, BLOCK_NONE, BLOCK_NONE, BLOCK_WALL,
+				BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL, BLOCK_WALL
 			],
 			start_position: [ 4, 5 ],
 			start_orientation: Orientation::East
@@ -207,7 +207,7 @@ impl Maze {
 	}
 	
 	pub fn is_empty(&self, position: [u32; 2]) -> bool {
-		self.block_at(position) == BLOCK_EMPTY
+		self.block_at(position) == BLOCK_NONE
 	}
 	
 	pub fn is_wall(&self, position: [u32; 2]) -> bool {
@@ -215,7 +215,7 @@ impl Maze {
 	}
 	
 	pub fn is_output(&self, position: [u32; 2]) -> bool {
-		self.block_at(position) == BLOCK_OUTPUT
+		self.block_at(position) == BLOCK_OUT
 	}
 	
 	fn block_at(&self, position: [u32; 2]) -> u8 {
