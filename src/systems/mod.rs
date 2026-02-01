@@ -1,5 +1,5 @@
-pub use self::walls::WallsSystem;
-pub use self::move_player::MovePlayerSystem;
-
-mod walls;
-mod move_player;
+pub mod map;
+pub mod cursor;
+pub mod light;
+pub mod input;
+pub mod ui;
