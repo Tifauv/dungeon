@@ -1,5 +1,4 @@
-pub mod map;
+pub mod actions;
 pub mod cursor;
 pub mod light;
-pub mod input;
 pub mod ui;

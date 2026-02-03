@@ -36,35 +36,3 @@ impl Wall {
         )
     }
 }*/
-/*{
-    pub part:  WallPart,
-    pub depth: u8
-}
-
-impl Wall {
-    fn new(part: WallPart, depth: u8) -> Wall {
-        Wall {
-            part,
-            depth
-        }
-    }
-}
-*/
-/*
-fn create(mut commands: Commands, part: WallPart, depth: u8, trans_x: f32, trans_y: f32, trans_z: f32, sprite_sheet_handle: Handle<SpriteSheet>, sprite_index: usize) {
-    let mut transform = Transform::default();
-    transform.set_translation_xyz(trans_x, trans_y, trans_z);
-
-    let sprite_render = SpriteRender {
-        sprite_sheet: sprite_sheet_handle,
-        sprite_number: sprite_index
-    };
-
-    commands.spawn((
-        Wall::new(part, depth),
-        transform,
-        sprite_render,
-        Hidden {}
-    ));
-}
-*/

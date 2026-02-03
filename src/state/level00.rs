@@ -176,36 +176,66 @@ pub fn spawn_map(
 
 
 pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>, mut p_materials: ResMut<Assets<StandardMaterial>>) {
-    // Torch light
-    p_commands.spawn((
-        Torch {
-            base_intensity: 2800.,
-            intensity_variation: 1400.,
-        },
-        PointLight {
-            color: Color::srgb_u8(255, 170, 0),
-            intensity: 2800.,
-            range: 10.,
-            radius: 0.1,
-            shadows_enabled: true,
-            ..default()
-        },
-        Mesh3d(p_meshes.add(Sphere::new(0.05))),
-        MeshMaterial3d(p_materials.add(Color::srgba_u8(255, 170, 0, 40))),
-        Transform::from_xyz(4.5, 2.0, 5.75),
-    ));
+    let player = p_commands
+        // Player
+        .spawn((
+            Player,
+            Player::default_input_map(),
 
-    // Camera
-    let camera = p_commands.spawn((
-        Player,
+        ))
+        .insert(Transform::from_xyz(4.5, 0.0, 5.5).looking_at(Vec3::new(5.5, 0.0, 5.5), Vec3::Y))
+        .id();
+
+    // Torch light
+    p_commands
+        .spawn((
+            Torch {
+                base_intensity: 2800.,
+                intensity_variation: 1400.,
+            },
+            PointLight {
+                color: Color::srgb_u8(255, 170, 0),
+                intensity: 2800.,
+                range: 10.,
+                radius: 0.1,
+                shadows_enabled: true,
+                ..default()
+            },
+            Mesh3d(p_meshes.add(Sphere::new(0.05))),
+            MeshMaterial3d(p_materials.add(Color::srgba_u8(255, 170, 0, 240))),
+            Transform::from_xyz(0.25, 2.0, -0.20),
+        ))
+        .insert(ChildOf(player));
+
+    // Camera for first person view
+    let camera = p_commands
+        .spawn((
+            Camera3d::default(),
+            Transform::from_xyz(0.0, 1.5, 0.0),
+            Camera {
+                order: 0 as isize,
+                ..default()
+            },
+            CameraView {
+                pos: UVec2::new(0, 0),
+                size: Vec2::new(0.75, 1.),
+            },
+        ))
+        .insert(ChildOf(player))
+        .id();
+
+    // Top Camera
+    let top_camera = p_commands.spawn((
         Camera3d::default(),
-        Transform::from_xyz(4.5, 1.5, 5.5).looking_at(Vec3::new(5.5, 1.5, 5.5), Vec3::Y),
+        AbovePlayer::new(player, 15.),
+        Transform::IDENTITY,
         Camera {
-            order: 0 as isize,
+            order: 1 as isize,
             ..default()
         },
-        CameraPosition{
-            pos: UVec2::new(0, 0),
+        CameraView {
+            pos: UVec2::new(3, 0),
+            size: Vec2::new(0.25, 1.),
         },
     )).id();
 
@@ -213,57 +243,27 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
     p_commands.spawn((
         UiTargetCamera(camera),
         Node {
-            width: percent(100),
+            width:  percent(100),
             height: percent(100),
             ..default()
         },
         children![
             (
-                Text::new("Player"),
+                Text::new("Player view"),
                 Node {
                     position_type: PositionType::Absolute,
-                    top: px(12),
+                    top:  px(12),
                     left: px(12),
                     ..default()
                 },
             ),
         ],
     ));
-}
-
-
-pub fn spawn_top_view(mut p_commands: Commands) {
-    // Global light (debug)
-    /*
     p_commands.spawn((
-        DirectionalLight{
-            shadows_enabled: true,
-            ..default()
-        },
-        Transform::from_xyz(4.5, 5., 5.5).looking_at(Vec3::new(5., 1.5, 5.), Vec3::Y),
-    ));
-    */
-
-    // Top Camera
-    let camera = p_commands.spawn((
-        Player,
-        Camera3d::default(),
-        Transform::from_xyz(4.5, 15., 5.5).looking_at(Vec3::new(4.5, 1.5, 5.5), Vec3::Y),
-        Camera {
-            order: 1 as isize,
-            ..default()
-        },
-        CameraPosition{
-            pos: UVec2::new(1, 0),
-        },
-    )).id();
-
-    // Setup UI
-    p_commands.spawn((
-        UiTargetCamera(camera),
+        UiTargetCamera(top_camera),
         Node {
-            width: percent(100),
-            height: percent(100),
+            width:  percent(50),
+            height: percent(50),
             ..default()
         },
         children![
@@ -271,9 +271,9 @@ pub fn spawn_top_view(mut p_commands: Commands) {
                 Text::new("Top view"),
                 Node {
                     position_type: PositionType::Absolute,
-                    top: px(12),
+                    top:  px(12),
                     left: px(12),
-                    ..default()
+                ..default()
                 },
             ),
         ],
@@ -281,11 +281,39 @@ pub fn spawn_top_view(mut p_commands: Commands) {
 }
 
 
+pub fn spawn_global_light(mut p_commands: Commands) {
+    p_commands.spawn((
+        DirectionalLight{
+            shadows_enabled: true,
+            ..default()
+        },
+        Transform::from_xyz(4.5, 5., 5.5).looking_at(Vec3::new(5., 1.5, 5.), Vec3::Y),
+    ));
+}
+
+
 pub fn spawn_axis(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>, mut p_materials: ResMut<Assets<StandardMaterial>>) {
+    let axis_length = 5.0;
+    let axis_radius = 0.1;
+
+    // X axis
+    p_commands.spawn((
+        Mesh3d(p_meshes.add(Cuboid::new(axis_length, axis_radius, axis_radius))),
+        MeshMaterial3d(p_materials.add(Color::srgb_u8(255, 0, 0))),
+        Transform::from_xyz(axis_length/2., axis_radius/2., axis_radius/2.),
+    ));
+
     // Y axis
     p_commands.spawn((
-        Mesh3d(p_meshes.add(Cuboid::new(0.1, 5., 0.1))),
-                      MeshMaterial3d(p_materials.add(Color::srgb_u8(255, 0, 0))),
-                      Transform::from_xyz(0.05, 2.5, 0.05),
+        Mesh3d(p_meshes.add(Cuboid::new(axis_radius, axis_length, axis_radius))),
+        MeshMaterial3d(p_materials.add(Color::srgb_u8(0, 255, 0))),
+        Transform::from_xyz(axis_radius/2., axis_length/2., axis_radius/2.),
+    ));
+
+    // Z axis
+    p_commands.spawn((
+        Mesh3d(p_meshes.add(Cuboid::new(axis_radius, axis_radius, axis_length))),
+        MeshMaterial3d(p_materials.add(Color::srgb_u8(0, 0, 255))),
+        Transform::from_xyz(axis_radius/2., axis_radius/2., axis_length/2.),
     ));
 }
