@@ -2,7 +2,6 @@ use crate::components::base::*;
 use crate::components::wall::*;
 use crate::components::light::*;
 use crate::components::player::*;
-use std::f32::consts::PI;
 use bevy::prelude::*;
 
 const GROUND_SIZE: f32    = 20.0;

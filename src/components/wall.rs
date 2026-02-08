@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use std::f32::consts::PI;
+use std::f32::consts::FRAC_PI_2;
 
 
 pub const WALL_LENGTH: f32    = 2.0;
@@ -39,7 +39,6 @@ pub struct WallBundleBuilder {
     x_offset: f32,
     y_offset: f32,
     z_offset: f32,
-    transform: Transform,
 }
 
 impl WallBundleBuilder {
@@ -55,7 +54,6 @@ impl WallBundleBuilder {
             x_offset: 0.,
             y_offset: 0.,
             z_offset: 0.,
-            transform: Transform::IDENTITY,
         }
     }
 
@@ -128,7 +126,7 @@ impl WallBundleBuilder {
                 self.x_offset + self.x + self.thickness/2.,
                 self.y_offset + self.y + self.height/2.,
                 self.z_offset + self.z + self.length/2.
-            ).with_rotation(Quat::from_rotation_y(PI / 2.))
+            ).with_rotation(Quat::from_rotation_y(FRAC_PI_2))
         };
 
         WallBundle {

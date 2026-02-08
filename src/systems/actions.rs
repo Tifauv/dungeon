@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use leafwing_input_manager::prelude::*;
-use std::f32::consts::FRAC_PI_2;
+use std::f32::consts::FRAC_PI_4;
 use std::ops::{Deref, DerefMut};
 use crate::components::player::*;
 
@@ -13,17 +13,7 @@ pub fn move_player(
 ) {
     debug!(">> System move_player");
     let action_state = p_action.single().expect("Player actions not found");
-
-    // Move
-    let move_axis = action_state.clamped_axis_pair(&UserAction::Move);
-    debug!("Move:");
-    debug!("  distance: {}", move_axis.length());
-    debug!("         x: {}", move_axis.x);
-    debug!("         y: {}", move_axis.y);
-
     let (player_transform, camera_sensitivity) = p_player.deref_mut();
-    player_transform.translation.x += move_axis.x * p_timer.delta_secs();
-    player_transform.translation.z -= move_axis.y * p_timer.delta_secs();
 
     // Camera rotation
     let look_axis = action_state.clamped_axis_pair(&UserAction::LookAround);
@@ -35,13 +25,24 @@ pub fn move_player(
     let delta_yaw   = -look_axis.x * camera_sensitivity.x;
     let delta_pitch = -look_axis.y * camera_sensitivity.y;
 
-    let (yaw, pitch, roll) = player_transform.rotation.to_euler(EulerRot::YXZ);
-    let yaw = yaw + delta_yaw;
+    let (mut yaw, mut pitch, _) = player_transform.rotation.to_euler(EulerRot::YXZ);
+    yaw   += delta_yaw;
+    pitch = (pitch + delta_pitch).clamp(-FRAC_PI_4, FRAC_PI_4);
 
-    const PITCH_LIMIT: f32 = FRAC_PI_2 - 0.01;
-    let pitch = (pitch + delta_pitch).clamp(-PITCH_LIMIT, PITCH_LIMIT);
+    player_transform.rotation = Quat::from_euler(EulerRot::YXZ, yaw, pitch, 0.0);
 
-    player_transform.rotation = Quat::from_euler(EulerRot::YXZ, yaw, pitch, roll);
+    // Move
+    let move_axis = action_state.clamped_axis_pair(&UserAction::Move);
+    debug!("Move:");
+    debug!("  distance: {}", move_axis.length());
+    debug!("         x: {}", move_axis.x);
+    debug!("         y: {}", move_axis.y);
+
+    let flat_rotation = Quat::from_euler(EulerRot::YXZ, yaw, 0.0, 0.0);
+    let mut velocity = move_axis.extend(0.0).xzy();
+    velocity.z = -velocity.z;
+
+    player_transform.translation += flat_rotation * velocity * p_timer.delta_secs();
 
     debug!("<< System move_player");
 }

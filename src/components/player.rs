@@ -40,6 +40,7 @@ impl Player {
                 UserAction::LookAround,
                 GamepadStick::RIGHT
                     .with_circle_deadzone(0.1)
+                    .inverted_y()
             )
     }
 }
