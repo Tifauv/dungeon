@@ -1,13 +1,14 @@
 use bevy::prelude::*;
 use leafwing_input_manager::prelude::*;
+use std::f32::consts::FRAC_PI_2;
 use std::ops::{Deref, DerefMut};
 use crate::components::player::*;
 
 
 pub fn move_player(
+    //p_mouse_motion
     p_action: Query<&ActionState<UserAction>, With<Player>>,
-    mut p_player: Single<(&Player, &mut Transform), Without<Camera>>,
-    mut p_camera: Query<(&ChildOf, &mut Transform), With<Camera>>,
+    mut p_player: Single<(&mut Transform, &CameraSensitivity), With<Player>>,
     p_timer: Res<Time>,
 ) {
     debug!(">> System move_player");
@@ -20,7 +21,7 @@ pub fn move_player(
     debug!("         x: {}", move_axis.x);
     debug!("         y: {}", move_axis.y);
 
-    let (_player, player_transform) = p_player.deref_mut();
+    let (player_transform, camera_sensitivity) = p_player.deref_mut();
     player_transform.translation.x += move_axis.x * p_timer.delta_secs();
     player_transform.translation.z -= move_axis.y * p_timer.delta_secs();
 
@@ -30,6 +31,17 @@ pub fn move_player(
     debug!("  distance: {}", look_axis.length());
     debug!("         x: {}", look_axis.x);
     debug!("         y: {}", look_axis.y);
+
+    let delta_yaw   = -look_axis.x * camera_sensitivity.x;
+    let delta_pitch = -look_axis.y * camera_sensitivity.y;
+
+    let (yaw, pitch, roll) = player_transform.rotation.to_euler(EulerRot::YXZ);
+    let yaw = yaw + delta_yaw;
+
+    const PITCH_LIMIT: f32 = FRAC_PI_2 - 0.01;
+    let pitch = (pitch + delta_pitch).clamp(-PITCH_LIMIT, PITCH_LIMIT);
+
+    player_transform.rotation = Quat::from_euler(EulerRot::YXZ, yaw, pitch, roll);
 
     debug!("<< System move_player");
 }

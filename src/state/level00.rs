@@ -181,7 +181,9 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
         .spawn((
             Player,
             Player::default_input_map(),
-
+            CameraSensitivity::default(),
+            Mesh3d(p_meshes.add(Sphere::new(0.2))),
+            MeshMaterial3d(p_materials.add(Color::srgb_u8(255, 0, 0))),
         ))
         .insert(Transform::from_xyz(4.5, 0.0, 5.5).looking_at(Vec3::new(5.5, 0.0, 5.5), Vec3::Y))
         .id();
@@ -203,7 +205,7 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
             },
             Mesh3d(p_meshes.add(Sphere::new(0.05))),
             MeshMaterial3d(p_materials.add(Color::srgba_u8(255, 170, 0, 240))),
-            Transform::from_xyz(0.25, 2.0, -0.20),
+            Transform::from_xyz(0.25, 0.5, -0.20),
         ))
         .insert(ChildOf(player));
 
@@ -211,7 +213,11 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
     let camera = p_commands
         .spawn((
             Camera3d::default(),
-            Transform::from_xyz(0.0, 1.5, 0.0),
+            Projection::from(PerspectiveProjection {
+               fov: 60.0_f32.to_radians(),
+               ..default()
+            }),
+            Transform::IDENTITY,
             Camera {
                 order: 0 as isize,
                 ..default()

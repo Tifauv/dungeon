@@ -11,7 +11,7 @@ pub enum UserAction {
 }
 
 
-#[derive(Component)]
+#[derive(Debug, Component)]
 pub struct Player;
 
 impl Player {
@@ -62,7 +62,18 @@ impl AbovePlayer {
     }
 }
 
-
 #[derive(Component)]
 #[relationship_target(relationship = AbovePlayer, linked_spawn)]
 pub struct PlayerFollowers(Vec<Entity>);
+
+
+#[derive(Debug, Component, Deref, DerefMut)]
+pub struct CameraSensitivity(Vec2);
+
+impl Default for CameraSensitivity {
+    fn default() -> Self {
+        Self(
+            Vec2::new(0.03, 0.02),
+        )
+    }
+}
