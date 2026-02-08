@@ -5,10 +5,7 @@ use crate::components::player::*;
 use std::f32::consts::PI;
 use bevy::prelude::*;
 
-const GROUND_SIZE: f32    = 10.0;
-
-const WALL_WIDTH: f32     = 1.0;
-const WALL_HEIGHT: f32    = 2.5;
+const GROUND_SIZE: f32    = 20.0;
 
 
 pub fn spawn_map(
@@ -25,153 +22,185 @@ pub fn spawn_map(
     ));
 
     // Walls
-    let wall_mesh     = p_meshes.add(Cuboid::new(WALL_WIDTH, WALL_HEIGHT, WALL_WIDTH));
-    let wall_material = p_materials.add(Color::srgb_u8(255, 252, 167));
+    // North wall with out door
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(9.5)
+        .move_to(WALL_THICKNESS, 0.)
+        .build(&mut p_meshes, &mut p_materials));
 
-    // North & South outer walls
-    for x in 0..10 {
-        // North wall
-        if x == 5 {
-            p_commands.spawn((
-                Wall,
-                Name::new("Wall"),
-                Mesh3d(p_meshes.add(Cuboid::new(WALL_WIDTH, 0.5, WALL_WIDTH))),
-                MeshMaterial3d(wall_material.clone()),
-                Transform::from_xyz(x as f32 + WALL_WIDTH/2., WALL_HEIGHT-0.25, WALL_WIDTH/2.),
-            ));
-        }
-        else {
-            p_commands.spawn((
-                Wall,
-                Name::new("Wall"),
-                Mesh3d(wall_mesh.clone()),
-                MeshMaterial3d(wall_material.clone()),
-                Transform::from_xyz(x as f32 + WALL_WIDTH/2., WALL_HEIGHT/2., WALL_WIDTH/2.),
-            ));
-        }
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(1.)
+        .with_height(0.5)
+        .move_to(WALL_THICKNESS + 9.5, 0.)
+        .move_to_y(2.)
+        .build(&mut p_meshes, &mut p_materials));
 
-        // South wall
-        p_commands.spawn((
-            Wall,
-            Name::new("Wall"),
-            Mesh3d(wall_mesh.clone()),
-            MeshMaterial3d(wall_material.clone()),
-            Transform::from_xyz(x as f32 + WALL_WIDTH/2., WALL_HEIGHT/2., 9. + WALL_WIDTH/2.),
-        ));
-    }
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(7.5)
+        .move_to(WALL_THICKNESS + 10.5, 0.)
+        .build(&mut p_meshes, &mut p_materials));
 
-    // West and East outer walls
-    for z in 1..9 {
-        // West wall
-        p_commands.spawn((
-            Wall,
-            Name::new("Wall"),
-            Mesh3d(wall_mesh.clone()),
-            MeshMaterial3d(wall_material.clone()),
-            Transform::from_xyz(WALL_WIDTH/2., WALL_HEIGHT/2., z as f32 + WALL_WIDTH/2.),
-        ));
+    // South wall
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(GROUND_SIZE - 2.*WALL_THICKNESS)
+        .move_to(WALL_THICKNESS, GROUND_SIZE - WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
 
-        // East wall
-        p_commands.spawn((
-            Wall,
-            Name::new("Wall"),
-            Mesh3d(wall_mesh.clone()),
-            MeshMaterial3d(wall_material.clone()),
-            Transform::from_xyz(9. + WALL_WIDTH/2., WALL_HEIGHT/2., z as f32 + WALL_WIDTH/2.),
-        ));
-    }
+    // West wall
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(GROUND_SIZE)
+        .rotate_90()
+        .build(&mut p_meshes, &mut p_materials));
+
+    // East wall
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(GROUND_SIZE)
+        .rotate_90()
+        .move_to(GROUND_SIZE - WALL_THICKNESS, 0.)
+        .build(&mut p_meshes, &mut p_materials));
 
     // Inner walls
-    p_commands.spawn((
-        Wall,
-        Mesh3d(wall_mesh.clone()),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(1. + WALL_WIDTH/2., WALL_HEIGHT/2., 1. + WALL_WIDTH/2.),
-    ));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(1.)
+        .rotate_90()
+        .move_to(1., 0.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(2.)
+        .move_to(0., 1.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
 
-    p_commands.spawn((
-        Wall,
-        Mesh3d(wall_mesh.clone()),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(6. + WALL_WIDTH/2., WALL_HEIGHT/2., 1. + WALL_WIDTH/2.),
-    ));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(2.)
+        .rotate_90()
+        .move_to(11., 0.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(2.)
+        .move_to(14., 1.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(10.)
+        .move_to(5., 2.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(3.)
+        .rotate_90()
+        .move_to(4., 2.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(3.)
+        .rotate_90()
+        .move_to(5., 3.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(2.)
+        .move_to(2., 4.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(3.)
+        .move_to(2., 5.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(10.)
+        .rotate_90()
+        .move_to(15., 2.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(2.)
+        .move_to(13., 11.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(4.)
+        .rotate_90()
+        .move_to(13., 12.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(2.)
+        .move_to(14., 15.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(2.)
+        .rotate_90()
+        .move_to(15., 13.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
 
-    p_commands.spawn((
-        Wall,
-        Mesh3d(p_meshes.add(Cuboid::new(5., 2.5, 1.))),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(5.5, WALL_HEIGHT/2., 2.5),
-    ));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(4.)
+        .move_to(9., 5.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(3.)
+        .rotate_90()
+        .move_to(8., 5.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(9.)
+        .move_to(4., 8.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(9.)
+        .rotate_90()
+        .move_to(10., 9.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(2.)
+        .rotate_90()
+        .move_to(4., 9.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(4.)
+        .move_to(3., 11.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(3.)
+        .rotate_90()
+        .move_to(2., 11.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(2.)
+        .rotate_90()
+        .move_to(2., 15.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(6.)
+        .rotate_90()
+        .move_to(7., 11.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(4.)
+        .move_to(3., 16.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
 
-    p_commands.spawn((
-        Wall,
-        Mesh3d(wall_mesh.clone()),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(2. + WALL_WIDTH/2., WALL_HEIGHT/2., 3. + WALL_WIDTH/2.),
-    ));
-
-    p_commands.spawn((
-        Wall,
-        Mesh3d(p_meshes.add(Cuboid::new(3., 2.5, 1.))),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(7.5, WALL_HEIGHT/2., 4.5).with_rotation(Quat::from_rotation_y(PI / 2.)),
-    ));
-
-    p_commands.spawn((
-        Wall,
-        Mesh3d(p_meshes.add(Cuboid::new(2., 2.5, 1.))),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(5., WALL_HEIGHT/2., 4.5),
-    ));
-
-    p_commands.spawn((
-        Wall,
-        Mesh3d(wall_mesh.clone()),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(1.5, WALL_HEIGHT/2., 5.5),
-    ));
-
-    p_commands.spawn((
-        Wall,
-        Mesh3d(p_meshes.add(Cuboid::new(2., 2.5, 1.))),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(3.5, WALL_HEIGHT/2., 6.).with_rotation(Quat::from_rotation_y(PI / 2.)),
-    ));
-
-    p_commands.spawn((
-        Wall,
-        Mesh3d(p_meshes.add(Cuboid::new(2., 2.5, 1.))),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(4.5, WALL_HEIGHT/2., 7.).with_rotation(Quat::from_rotation_y(PI / 2.)),
-    ));
-
-    p_commands.spawn((
-        Wall,
-        Mesh3d(wall_mesh.clone()),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(6.5, WALL_HEIGHT/2., 6.5),
-    ));
-
-    p_commands.spawn((
-        Wall,
-        Mesh3d(wall_mesh.clone()),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(2.5, WALL_HEIGHT/2., 7.5),
-    ));
-
-    p_commands.spawn((
-        Wall,
-        Mesh3d(wall_mesh.clone()),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(7.5, WALL_HEIGHT/2., 7.5),
-    ));
-
-    p_commands.spawn((
-        Wall,
-        Mesh3d(wall_mesh.clone()),
-        MeshMaterial3d(wall_material.clone()),
-        Transform::from_xyz(5.5, WALL_HEIGHT/2., 8.5),
-    ));
+    p_commands.spawn(WallBundleBuilder::new()
+        .with_length(2.)
+        .move_to(0., 8.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
 }
 
 
@@ -185,7 +214,7 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
             Mesh3d(p_meshes.add(Sphere::new(0.2))),
             MeshMaterial3d(p_materials.add(Color::srgb_u8(255, 0, 0))),
         ))
-        .insert(Transform::from_xyz(4.5, 0.0, 5.5).looking_at(Vec3::new(5.5, 0.0, 5.5), Vec3::Y))
+        .insert(Transform::from_xyz(11., 1.5, 8.).looking_at(Vec3::new(12., 1.5, 8.), Vec3::Y))
         .id();
 
     // Torch light
@@ -293,7 +322,7 @@ pub fn spawn_global_light(mut p_commands: Commands) {
             shadows_enabled: true,
             ..default()
         },
-        Transform::from_xyz(4.5, 5., 5.5).looking_at(Vec3::new(5., 1.5, 5.), Vec3::Y),
+        Transform::from_xyz(9., 5., 11.).looking_at(Vec3::new(10., 1.5, 10.), Vec3::Y),
     ));
 }
 
