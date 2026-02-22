@@ -241,8 +241,9 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
     let camera = p_commands
         .spawn((
             Camera3d::default(),
+            Name::new("Player camera"),
             Projection::from(PerspectiveProjection {
-               fov: 60.0_f32.to_radians(),
+               fov: 90.0_f32.to_radians(),
                ..default()
             }),
             Transform::IDENTITY,
@@ -261,6 +262,7 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
     // Top Camera
     let top_camera = p_commands.spawn((
         Camera3d::default(),
+        Name::new("Top camera"),
         AbovePlayer::new(player, 15.),
         Transform::IDENTITY,
         Camera {
