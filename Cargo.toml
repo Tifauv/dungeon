@@ -1,9 +1,45 @@
 [package]
 name    = "dungeon"
-version = "0.1.0"
+version = "0.2.0"
+edition = "2024"
 authors = [ "Olivier Serve <tifauv@gmail.com>" ]
-edition = "2018"
 
-[dependencies.amethyst]
-version = "0.15"
-features = [ "vulkan" ]
+[dependencies.rand]
+version = "0.9"
+
+[dependencies.bevy]
+version = "0.18"
+default-features = false
+features = [
+    # Collections
+    "dev",
+    #"audio",
+    "scene",
+    #"picking",
+    "default_app",
+    "default_platform",
+    "common_api",
+    "3d_api",
+    "3d_bevy_render",
+    "ui_api",
+    "ui_bevy_render",
+]
+
+[dependencies.avian3d]
+version = "0.5"
+
+[dependencies.leafwing-input-manager]
+version = "0.20"
+
+[dependencies.bevy-inspector-egui]
+version = "0.36"
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+codegen-units = 1
+lto = "thin"
