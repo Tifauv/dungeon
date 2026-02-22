@@ -1,5 +1,9 @@
 use bevy::prelude::*;
+use avian3d::prelude::*;
+use avian3d::math::Vector;
 use leafwing_input_manager::prelude::*;
+
+use crate::components::character_controller::*;
 
 
 #[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug, Reflect)]
@@ -52,6 +56,9 @@ pub struct PlayerBundle {
     name              : Name,
     input_map         : InputMap<UserAction>,
     camera_sensitivity: CameraSensitivity,
+    controller        : CharacterControllerBundle,
+    collision_events  : CollisionEventsEnabled,
+    visibility        : Visibility,
     transform         : Transform,
 }
 
@@ -63,6 +70,8 @@ impl PlayerBundle {
 
 pub struct PlayerBundleBuilder {
     camera_sensitivity: CameraSensitivity,
+    collider          : Collider,
+    gravity           : Vector,
     x                 : f32,
     y                 : f32,
     z                 : f32,
@@ -75,6 +84,8 @@ impl Default for PlayerBundleBuilder {
     fn default() -> Self {
         Self {
             camera_sensitivity: CameraSensitivity::default(),
+            collider          : Collider::cuboid(1.0, 1.0, 1.0),
+            gravity           : ControllerGravity::default_vector(),
             x                 : 0.,
             y                 : 0.,
             z                 : 0.,
@@ -90,6 +101,17 @@ impl PlayerBundleBuilder {
         self.camera_sensitivity = p_camera_sensitivity;
         self
     }
+
+    pub fn with_collider(mut self, p_collider: Collider) -> Self {
+        self.collider = p_collider;
+        self
+    }
+
+    pub fn with_gravity(mut self, p_gravity: Vector) -> Self {
+        self.gravity = p_gravity;
+        self
+    }
+
     pub fn move_to(mut self, p_x: f32, p_y: f32, p_z: f32) -> Self {
         self.x = p_x;
         self.y = p_y;
@@ -110,6 +132,12 @@ impl PlayerBundleBuilder {
             name              : Name::new("Player"),
             input_map         : Player::default_input_map(),
             camera_sensitivity: self.camera_sensitivity,
+            controller        : CharacterControllerBundle::new(
+                self.collider,
+                self.gravity,
+            ),
+            collision_events  : CollisionEventsEnabled,
+            visibility        : Visibility::default(),
             transform         : Transform::from_xyz(self.x, self.y, self.z)
                                 .looking_at(Vec3::new(self.look_at_x, self.look_at_y, self.look_at_z), Vec3::Y),
         }

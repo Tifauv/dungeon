@@ -1,4 +1,6 @@
 use bevy::prelude::*;
+use avian3d::prelude::*;
+
 use crate::components::base::*;
 use crate::components::ground::*;
 use crate::components::wall::*;
@@ -204,6 +206,7 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
     let player = p_commands
         // Player
         .spawn(PlayerBundle::builder()
+            .with_collider(Collider::capsule(0.25, 0.65))
             .move_to(11., 0.01, 8.)
             .look_at(12., 0.0 , 8.)
             .build()
