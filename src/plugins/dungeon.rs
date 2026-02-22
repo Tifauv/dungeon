@@ -28,6 +28,8 @@ impl Plugin for DungeonPlugin {
                 */
             ))
             .add_systems(Update, (
+                systems::actions::print_started_collisions,
+                systems::actions::print_stopped_collisions,
                 systems::ui::set_camera_viewports,
                 systems::cursor::draw,
                 systems::light::flicker_torch,

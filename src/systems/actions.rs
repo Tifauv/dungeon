@@ -24,3 +24,25 @@ pub fn move_top_camera(
 
     debug!("<< System move_top_camera");
 }
+
+
+pub fn print_started_collisions(mut p_collisions_reader: MessageReader<CollisionStart>) {
+    for event in p_collisions_reader.read() {
+        info!(
+            "Entities {} and {} started colliding",
+            event.collider1,
+            event.collider2,
+        );
+    }
+}
+
+
+pub fn print_stopped_collisions(mut p_collisions_reader: MessageReader<CollisionEnd>) {
+    for event in p_collisions_reader.read() {
+        info!(
+            "Entities {} and {} stopped colliding",
+            event.collider1,
+            event.collider2,
+        );
+    }
+}
