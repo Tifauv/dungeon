@@ -1,9 +1,9 @@
+use bevy::prelude::*;
 use crate::components::base::*;
 use crate::components::ground::*;
 use crate::components::wall::*;
 use crate::components::light::*;
 use crate::components::player::*;
-use bevy::prelude::*;
 
 
 pub fn spawn_map(
@@ -203,14 +203,11 @@ pub fn spawn_map(
 pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>, mut p_materials: ResMut<Assets<StandardMaterial>>) {
     let player = p_commands
         // Player
-        .spawn((
-            Player,
-            Player::default_input_map(),
-            CameraSensitivity::default(),
-            Mesh3d(p_meshes.add(Sphere::new(0.2))),
-            MeshMaterial3d(p_materials.add(Color::srgb_u8(255, 0, 0))),
-        ))
-        .insert(Transform::from_xyz(11., 1.5, 8.).looking_at(Vec3::new(12., 1.5, 8.), Vec3::Y))
+        .spawn(PlayerBundle::builder()
+            .move_to(11., 0.01, 8.)
+            .look_at(12., 0.0 , 8.)
+            .build()
+        )
         .id();
 
     // Torch light
