@@ -5,6 +5,7 @@ mod state;
 use bevy::prelude::*;
 use leafwing_input_manager::prelude::*;
 
+use bevy_inspector_egui::{bevy_egui::EguiPlugin, quick::WorldInspectorPlugin};
 
 pub struct DungeonPlugin;
 
@@ -37,7 +38,11 @@ impl Plugin for DungeonPlugin {
 
 fn main() {
 	App::new()
-		.add_plugins(DefaultPlugins)
+		.add_plugins((
+			DefaultPlugins,
+			EguiPlugin::default(),
+			WorldInspectorPlugin::default(),
+		))
 		.add_plugins(DungeonPlugin)
 		.run();
 }
