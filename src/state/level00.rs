@@ -281,17 +281,6 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
             height: percent(100),
             ..default()
         },
-        children![
-            (
-                Text::new("Player view"),
-                Node {
-                    position_type: PositionType::Absolute,
-                    top:  px(12),
-                    left: px(12),
-                    ..default()
-                },
-            ),
-        ],
     ));
     p_commands.spawn((
         UiTargetCamera(top_camera),
