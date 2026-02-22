@@ -208,6 +208,14 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
             .look_at(12., 0.0 , 8.)
             .build()
         )
+        .with_children(|parent| {
+            // Body
+            parent.spawn(PlayerBodyBundle::builder()
+                .with_radius(0.25)
+                .with_height(1.8)
+                .build(&mut p_meshes, &mut p_materials)
+            );
+        })
         .id();
 
     // Torch light
@@ -240,7 +248,7 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
                fov: 90.0_f32.to_radians(),
                ..default()
             }),
-            Transform::IDENTITY,
+            Transform::from_xyz(0., 0.775, 0.),
             Camera {
                 order: 0 as isize,
                 ..default()

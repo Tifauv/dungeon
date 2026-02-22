@@ -117,6 +117,76 @@ impl PlayerBundleBuilder {
 }
 
 
+#[derive(Component)]
+pub struct PlayerBody;
+
+#[derive(Bundle)]
+pub struct PlayerBodyBundle {
+    marker   : PlayerBody,
+    name     : Name,
+    mesh     : Mesh3d,
+    material : MeshMaterial3d<StandardMaterial>,
+    transform: Transform,
+}
+
+impl PlayerBodyBundle {
+    pub fn builder() -> PlayerBodyBundleBuilder {
+        PlayerBodyBundleBuilder::default()
+    }
+}
+
+pub struct PlayerBodyBundleBuilder {
+    height: f32,
+    radius: f32,
+    x     : f32,
+    y     : f32,
+    z     : f32,
+}
+
+impl Default for PlayerBodyBundleBuilder {
+    fn default() -> Self {
+        Self {
+            height: 0.7,
+            radius: 0.2,
+            x     : 0.,
+            y     : 0.,
+            z     : 0.,
+        }
+    }
+}
+
+impl PlayerBodyBundleBuilder {
+    pub fn with_height(mut self, p_full_height: f32) -> Self {
+        self.height = p_full_height;
+        self
+    }
+
+    pub fn with_radius(mut self, p_radius: f32) -> Self {
+        self.radius = p_radius;
+        self
+    }
+
+    pub fn move_to(mut self, p_x: f32, p_y: f32, p_z: f32) -> Self {
+        self.x = p_x;
+        self.y = p_y;
+        self.z = p_z;
+        self
+    }
+
+    pub fn build(
+        self,
+        p_meshes   : &mut ResMut<Assets<Mesh>>,
+        p_materials: &mut ResMut<Assets<StandardMaterial>>
+    ) -> PlayerBodyBundle {
+        PlayerBodyBundle {
+            marker   : PlayerBody,
+            name     : Name::new("Body"),
+            mesh     : Mesh3d(p_meshes.add(Capsule3d::new(self.radius, self.height / 2. - self.radius))),
+            material : MeshMaterial3d(p_materials.add(Color::srgb_u8(255, 0, 0))),
+            transform: Transform::from_xyz(self.x, self.y, self.z),
+        }
+    }
+}
 
 
 #[derive(Component, Deref, DerefMut)]
