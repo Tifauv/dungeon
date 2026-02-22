@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use avian3d::prelude::*;
 use std::f32::consts::FRAC_PI_2;
 
 
@@ -17,6 +18,8 @@ pub struct WallBundle {
     name     : Name,
     mesh     : Mesh3d,
     material : MeshMaterial3d<StandardMaterial>,
+    body     : RigidBody,
+    collider : ColliderConstructor,
     transform: Transform,
 }
 
@@ -135,6 +138,12 @@ impl WallBundleBuilder {
             name     : Name::new("Wall"),
             mesh     : Mesh3d(p_meshes.add(Cuboid::new(self.length, self.height, self.thickness))),
             material : MeshMaterial3d(p_materials.add(Color::srgb_u8(255, 252, 167))),
+            body     : RigidBody::Static,
+            collider : ColliderConstructor::Cuboid {
+                x_length: self.length,
+                y_length: self.height,
+                z_length: self.thickness,
+            },
             transform: transform,
         }
     }

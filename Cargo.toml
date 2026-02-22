@@ -25,6 +25,9 @@ features = [
     "ui_bevy_render",
 ]
 
+[dependencies.avian3d]
+version = "0.5"
+
 [dependencies.leafwing-input-manager]
 version = "0.20"
 

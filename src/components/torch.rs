@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use avian3d::prelude::*;
 
 
 pub const TORCH_INTENSITY_BASE : f32 = 2800.;
@@ -22,6 +23,8 @@ pub struct TorchBundle {
     mesh     : Mesh3d,
     material : MeshMaterial3d<StandardMaterial>,
     light    : PointLight,
+    /*    body     : RigidBody,
+    collider : Collider,*/
     transform: Transform,
 }
 
@@ -108,6 +111,8 @@ impl TorchBundleBuilder {
                 shadows_enabled: true,
                 ..default()
             },
+            /*body     : RigidBody::Static,
+            collider : Collider::sphere(self.radius),*/
             transform: Transform::from_xyz(self.x, self.y, self.z),
         }
     }
