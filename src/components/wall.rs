@@ -14,11 +14,11 @@ pub struct Wall;
 #[derive(Bundle)]
 pub struct WallBundle {
     marker   : Wall,
+    name     : Name,
     mesh     : Mesh3d,
     material : MeshMaterial3d<StandardMaterial>,
     transform: Transform,
 }
-
 
 impl WallBundle {
     pub fn builder() -> WallBundleBuilder {
@@ -27,7 +27,6 @@ impl WallBundle {
 }
 
 
-#[derive(Default)]
 pub struct WallBundleBuilder {
     length    : f32,
     height    : f32,
@@ -41,8 +40,8 @@ pub struct WallBundleBuilder {
     z_offset: f32,
 }
 
-impl WallBundleBuilder {
-    pub fn new() -> Self {
+impl Default for WallBundleBuilder {
+    fn default() -> Self {
         Self {
             length:    WALL_LENGTH,
             height:    WALL_HEIGHT,
@@ -56,7 +55,9 @@ impl WallBundleBuilder {
             z_offset: 0.,
         }
     }
+}
 
+impl WallBundleBuilder {
     pub fn with_length(mut self, p_length: f32) -> Self {
         self.length = p_length;
         self
@@ -111,7 +112,7 @@ impl WallBundleBuilder {
 
     pub fn build(
         self,
-        p_meshes: &mut ResMut<Assets<Mesh>>,
+        p_meshes   : &mut ResMut<Assets<Mesh>>,
         p_materials: &mut ResMut<Assets<StandardMaterial>>
     ) -> WallBundle {
         let transform = if !self.rotate {
@@ -130,12 +131,10 @@ impl WallBundleBuilder {
         };
 
         WallBundle {
-            marker: Wall,
-            mesh: Mesh3d(p_meshes.add(Cuboid::new(
-                self.length,
-                self.height,
-                self.thickness))),
-            material: MeshMaterial3d(p_materials.add(Color::srgb_u8(255, 252, 167))),
+            marker   : Wall,
+            name     : Name::new("Wall"),
+            mesh     : Mesh3d(p_meshes.add(Cuboid::new(self.length, self.height, self.thickness))),
+            material : MeshMaterial3d(p_materials.add(Color::srgb_u8(255, 252, 167))),
             transform: transform,
         }
     }

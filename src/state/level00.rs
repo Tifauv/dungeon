@@ -19,180 +19,180 @@ pub fn spawn_map(
 
     // Walls
     // North wall with out door
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(9.5)
         .move_to(WALL_THICKNESS, 0.)
         .build(&mut p_meshes, &mut p_materials));
 
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(1.)
         .with_height(0.5)
         .move_to(WALL_THICKNESS + 9.5, 0.)
         .move_to_y(2.)
         .build(&mut p_meshes, &mut p_materials));
 
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(7.5)
         .move_to(WALL_THICKNESS + 10.5, 0.)
         .build(&mut p_meshes, &mut p_materials));
 
     // South wall
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(GROUND_SIZE - 2.*WALL_THICKNESS)
         .move_to(WALL_THICKNESS, GROUND_SIZE - WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
 
     // West wall
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(GROUND_SIZE)
         .rotate_90()
         .build(&mut p_meshes, &mut p_materials));
 
     // East wall
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(GROUND_SIZE)
         .rotate_90()
         .move_to(GROUND_SIZE - WALL_THICKNESS, 0.)
         .build(&mut p_meshes, &mut p_materials));
 
     // Inner walls
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(1.)
         .rotate_90()
         .move_to(1., 0.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(2.)
         .move_to(0., 1.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
 
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(2.)
         .rotate_90()
         .move_to(11., 0.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(2.)
         .move_to(14., 1.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(10.)
         .move_to(5., 2.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(3.)
         .rotate_90()
         .move_to(4., 2.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(3.)
         .rotate_90()
         .move_to(5., 3.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(2.)
         .move_to(2., 4.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(3.)
         .move_to(2., 5.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(10.)
         .rotate_90()
         .move_to(15., 2.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(2.)
         .move_to(13., 11.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(4.)
         .rotate_90()
         .move_to(13., 12.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(2.)
         .move_to(14., 15.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(2.)
         .rotate_90()
         .move_to(15., 13.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
 
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(4.)
         .move_to(9., 5.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(3.)
         .rotate_90()
         .move_to(8., 5.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(9.)
         .move_to(4., 8.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(9.)
         .rotate_90()
         .move_to(10., 9.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(2.)
         .rotate_90()
         .move_to(4., 9.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(4.)
         .move_to(3., 11.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(3.)
         .rotate_90()
         .move_to(2., 11.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(2.)
         .rotate_90()
         .move_to(2., 15.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(6.)
         .rotate_90()
         .move_to(7., 11.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(4.)
         .move_to(3., 16.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
 
-    p_commands.spawn(WallBundleBuilder::new()
+    p_commands.spawn(WallBundle::builder()
         .with_length(2.)
         .move_to(0., 8.)
         .with_xz_offset(WALL_THICKNESS)
