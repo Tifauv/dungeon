@@ -1,5 +1,7 @@
-use crate::components::base::*;
 use bevy::prelude::*;
+
+use crate::components::ground::*;
+
 
 pub fn draw(
     camera_query: Single<(&Camera, &GlobalTransform)>,

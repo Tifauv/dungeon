@@ -1,10 +1,9 @@
 use crate::components::base::*;
+use crate::components::ground::*;
 use crate::components::wall::*;
 use crate::components::light::*;
 use crate::components::player::*;
 use bevy::prelude::*;
-
-const GROUND_SIZE: f32    = 20.0;
 
 
 pub fn spawn_map(
@@ -13,12 +12,10 @@ pub fn spawn_map(
     mut p_materials: ResMut<Assets<StandardMaterial>>
 ) {
     // Ground
-    p_commands.spawn((
-        Ground,
-        Mesh3d(p_meshes.add(Plane3d::default().mesh().size(GROUND_SIZE, GROUND_SIZE))),
-        MeshMaterial3d(p_materials.add(Color::srgb(0.6, 0.3, 0.0))),
-        Transform::from_xyz(GROUND_SIZE/2., 0., GROUND_SIZE/2.),
-    ));
+    p_commands.spawn(GroundBundle::builder()
+        .with_size(GROUND_SIZE, GROUND_SIZE)
+        .move_to(GROUND_SIZE/2., GROUND_SIZE/2.)
+        .build(&mut p_meshes, &mut p_materials));
 
     // Walls
     // North wall with out door

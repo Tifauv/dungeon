@@ -46,6 +46,20 @@ impl Player {
 }
 
 
+
+
+#[derive(Component, Deref, DerefMut)]
+pub struct CameraSensitivity(Vec2);
+
+impl Default for CameraSensitivity {
+    fn default() -> Self {
+        Self(
+            Vec2::new(2.0, 1.2),
+        )
+    }
+}
+
+
 #[derive(Component)]
 #[relationship(relationship_target = PlayerFollowers)]
 pub struct AbovePlayer {
@@ -66,15 +80,3 @@ impl AbovePlayer {
 #[derive(Component)]
 #[relationship_target(relationship = AbovePlayer, linked_spawn)]
 pub struct PlayerFollowers(Vec<Entity>);
-
-
-#[derive(Debug, Component, Deref, DerefMut)]
-pub struct CameraSensitivity(Vec2);
-
-impl Default for CameraSensitivity {
-    fn default() -> Self {
-        Self(
-            Vec2::new(0.03, 0.02),
-        )
-    }
-}
