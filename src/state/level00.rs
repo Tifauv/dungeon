@@ -2,8 +2,8 @@ use bevy::prelude::*;
 use crate::components::base::*;
 use crate::components::ground::*;
 use crate::components::wall::*;
-use crate::components::light::*;
 use crate::components::player::*;
+use crate::components::torch::*;
 
 
 pub fn spawn_map(
@@ -209,6 +209,11 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
             .build()
         )
         .with_children(|parent| {
+            // Torch
+            parent.spawn(TorchBundle::builder()
+                .move_to(0.25, 1., -0.2)
+                .build(&mut p_meshes, &mut p_materials)
+            );
             // Body
             parent.spawn(PlayerBodyBundle::builder()
                 .with_radius(0.25)
@@ -217,27 +222,6 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
             );
         })
         .id();
-
-    // Torch light
-    p_commands
-        .spawn((
-            Torch {
-                base_intensity: 2800.,
-                intensity_variation: 1400.,
-            },
-            PointLight {
-                color: Color::srgb_u8(255, 170, 0),
-                intensity: 2800.,
-                range: 10.,
-                radius: 0.1,
-                shadows_enabled: true,
-                ..default()
-            },
-            Mesh3d(p_meshes.add(Sphere::new(0.05))),
-            MeshMaterial3d(p_materials.add(Color::srgba_u8(255, 170, 0, 240))),
-            Transform::from_xyz(0.25, 0.5, -0.20),
-        ))
-        .insert(ChildOf(player));
 
     // Camera for first person view
     let camera = p_commands
