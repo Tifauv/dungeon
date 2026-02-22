@@ -19,13 +19,10 @@ features = [
     "default_app",
     "default_platform",
     "common_api",
-    #"2d_api",
-    #"2d_bevy_render",
     "3d_api",
     "3d_bevy_render",
     "ui_api",
     "ui_bevy_render",
-    #"default_no_std"
 ]
 
 [dependencies.leafwing-input-manager]
