@@ -31,7 +31,6 @@ impl Plugin for DungeonPlugin {
                 systems::actions::print_started_collisions,
                 systems::actions::print_stopped_collisions,
                 systems::ui::set_camera_viewports,
-                systems::cursor::draw,
                 systems::light::flicker_torch,
                 systems::actions::move_top_camera,
             ));
