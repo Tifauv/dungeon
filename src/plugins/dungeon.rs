@@ -1,10 +1,11 @@
 use bevy::prelude::*;
 use avian3d::prelude::*;
-use leafwing_input_manager::prelude::*;
+use bevy_enhanced_input::prelude::*;
 
 use crate::components;
 use crate::state;
 use crate::systems;
+use crate::observers;
 use crate::plugins;
 
 pub struct DungeonPlugin;
@@ -15,9 +16,12 @@ impl Plugin for DungeonPlugin {
             .insert_resource(GlobalAmbientLight::NONE)
             .add_plugins((
                 PhysicsPlugins::default(),
-                InputManagerPlugin::<components::player::UserAction>::default(),
+                EnhancedInputPlugin,
                 plugins::character_controller::CharacterControllerPlugin,
             ))
+            .add_input_context::<components::player::Player>()
+            .add_observer(observers::input::capture_cursor)
+            .add_observer(observers::input::release_cursor)
             .add_systems(Startup, (
                 state::level00::spawn_map,
                 state::level00::spawn_player,

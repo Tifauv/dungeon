@@ -1,66 +1,18 @@
 use bevy::prelude::*;
+use bevy_enhanced_input::prelude::*;
 use avian3d::prelude::*;
 use avian3d::math::Vector;
-use leafwing_input_manager::prelude::*;
 
 use crate::components::character_controller::*;
-
-
-#[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug, Reflect)]
-pub enum UserAction {
-    #[actionlike(DualAxis)]
-    Move,
-    #[actionlike(DualAxis)]
-    LookAround,
-}
+use crate::components::input_actions;
 
 
 #[derive(Component)]
 pub struct Player;
 
-impl Player {
-    pub fn default_input_map() -> InputMap<UserAction> {
-        InputMap::default()
-            .with_dual_axis(
-                UserAction::Move,
-                VirtualDPad::wasd()
-                    .with_circle_deadzone(0.1)
-                    .inverted_y()
-                    .reset_processing_pipeline(),
-            )
-            .with_dual_axis(
-                UserAction::Move,
-                GamepadStick::LEFT
-                    .with_circle_deadzone(0.1)
-            )
-            .with_dual_axis(
-                UserAction::LookAround,
-                MouseMove::default().replace_processing_pipeline([
-                    CircleDeadZone::new(0.1).into(),
-                    DualAxisSensitivity::all(2.0).into(),
-                ]),
-            )
-            .with_dual_axis(
-                UserAction::LookAround,
-                GamepadStick::RIGHT
-                    .with_circle_deadzone(0.1)
-                    .inverted_y()
-            )
-    }
-}
-
 
 #[derive(Bundle)]
-pub struct PlayerBundle {
-    marker            : Player,
-    name              : Name,
-    input_map         : InputMap<UserAction>,
-    camera_sensitivity: CameraSensitivity,
-    controller        : CharacterControllerBundle,
-    collision_events  : CollisionEventsEnabled,
-    visibility        : Visibility,
-    transform         : Transform,
-}
+pub struct PlayerBundle;
 
 impl PlayerBundle {
     pub fn builder() -> PlayerBundleBuilder {
@@ -126,21 +78,49 @@ impl PlayerBundleBuilder {
         self
     }
 
-    pub fn build(self) -> PlayerBundle {
-        PlayerBundle {
-            marker            : Player,
-            name              : Name::new("Player"),
-            input_map         : Player::default_input_map(),
-            camera_sensitivity: self.camera_sensitivity,
-            controller        : CharacterControllerBundle::new(
+    pub fn build(self) -> impl Bundle {
+        (
+            Player,
+            Name::new("Player"),
+            actions!(Player[
+                (
+                    Action::<input_actions::Move>::new(),
+                    DeadZone::default(),
+                    SmoothNudge::default(),
+                    DeltaScale::default(),
+                    Scale::splat(1.0),
+                    Bindings::spawn((
+                        Cardinal::wasd_keys(),
+                        Axial::left_stick(),
+                    )),
+                ),
+                (
+                    Action::<input_actions::LookAround>::new(),
+                    DeltaScale::default(),
+                    Bindings::spawn((
+                        Spawn((Binding::mouse_motion(), Negate::all())),
+                        Axial::right_stick().with((Scale::splat(100.0), Negate::x())),
+                    )),
+                ),
+                (
+                    Action::<input_actions::CaptureCursor>::new(),
+                    bindings![MouseButton::Left],
+                ),
+                (
+                    Action::<input_actions::ReleaseCursor>::new(),
+                    bindings![KeyCode::Escape]
+                ),
+            ]),
+            self.camera_sensitivity,
+            CharacterControllerBundle::new(
                 self.collider,
                 self.gravity,
             ),
-            collision_events  : CollisionEventsEnabled,
-            visibility        : Visibility::default(),
-            transform         : Transform::from_xyz(self.x, self.y, self.z)
-                                .looking_at(Vec3::new(self.look_at_x, self.look_at_y, self.look_at_z), Vec3::Y),
-        }
+            CollisionEventsEnabled,
+            Visibility::default(),
+            Transform::from_xyz(self.x, self.y, self.z)
+                .looking_at(Vec3::new(self.look_at_x, self.look_at_y, self.look_at_z), Vec3::Y),
+        )
     }
 }
 

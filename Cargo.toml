@@ -28,8 +28,8 @@ features = [
 [dependencies.avian3d]
 version = "0.5"
 
-[dependencies.leafwing-input-manager]
-version = "0.20"
+[dependencies.bevy_enhanced_input]
+version = "0.24"
 
 [dependencies.bevy-inspector-egui]
 version = "0.36"

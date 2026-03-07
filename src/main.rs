@@ -1,6 +1,7 @@
 mod components;
 mod state;
 mod systems;
+mod observers;
 mod plugins;
 
 use bevy::prelude::*;

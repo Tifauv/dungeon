@@ -1,18 +1,14 @@
 use bevy::prelude::*;
 use avian3d::prelude::*;
 use avian3d::math::*;
-use leafwing_input_manager::prelude::ActionState;
-use std::f32::consts::FRAC_PI_4;
 
 use crate::components::base::*;
-use crate::components::player::*;
 use crate::components::movement::*;
 use crate::components::character_controller::*;
 
 
 
 /// Dynamically adds or removes the Grounded component on a CharacterController.
-///
 pub fn update_grounded(
     mut p_commands: Commands,
     mut p_query: Query<(Entity, &ShapeHits, &Rotation, Option<&MaxSlopeAngle>),
@@ -47,52 +43,6 @@ pub fn apply_gravity(
 ) {
     for (gravity, mut linear_velocity) in &mut p_controllers {
         linear_velocity.0 += **gravity * p_time.delta_secs();
-    }
-}
-
-
-pub fn rotate_character(
-    p_time: Res<Time>,
-    p_action: Query<&ActionState<UserAction>, With<Player>>,
-    mut p_controllers: Query<(&mut Transform, &CameraSensitivity),
-                         With<Player>>,
-) {
-    let action_state = p_action.single().expect("Player actions not found");
-
-    for (mut transform, camera_sensitivity) in &mut p_controllers {
-        let look_axis = action_state.clamped_axis_pair(&UserAction::LookAround);
-        let (mut yaw, mut pitch, _) = transform.rotation.to_euler(EulerRot::YXZ);
-        let delta_yaw   = -look_axis.x * camera_sensitivity.x * p_time.delta_secs();
-        let delta_pitch = -look_axis.y * camera_sensitivity.y * p_time.delta_secs();
-        yaw  += delta_yaw;
-        pitch = (pitch + delta_pitch).clamp(-FRAC_PI_4, FRAC_PI_4);
-
-        transform.rotation = Quat::from_euler(EulerRot::YXZ, yaw, pitch, 0.0);
-    }
-}
-
-
-/// Move the CharacterControllers.
-pub fn move_character(
-    p_time: Res<Time>,
-    p_action: Query<&ActionState<UserAction>, With<Player>>,
-    mut p_controllers: Query<(
-        &MovementAcceleration,
-        &JumpImpulse,
-        &Transform,
-        &mut LinearVelocity,
-        Has<Grounded>,
-    )>,
-) {
-    let action_state = p_action.single().expect("Player actions not found");
-    let move_axis = action_state.clamped_axis_pair(&UserAction::Move);
-
-    for (movement_acceleration, jump_impulse, transform, mut linear_velocity, is_grounded) in &mut p_controllers {
-        let (yaw, _, _) = transform.rotation.to_euler(EulerRot::YXZ);
-        let flat_rotation = Quat::from_euler(EulerRot::YXZ, yaw, 0.0, 0.0);
-
-        let movement: Vec3 = Vec3::new(move_axis.x, 0.0, -move_axis.y);
-        linear_velocity.0 += flat_rotation * movement * **movement_acceleration * p_time.delta_secs();
     }
 }
 
