@@ -103,6 +103,10 @@ impl PlayerBundleBuilder {
                     )),
                 ),
                 (
+                    Action::<input_actions::Jump>::new(),
+                    bindings![KeyCode::Space, GamepadButton::South],
+                ),
+                (
                     Action::<input_actions::CaptureCursor>::new(),
                     bindings![MouseButton::Left],
                 ),

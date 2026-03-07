@@ -4,6 +4,7 @@ use bevy_enhanced_input::prelude::*;
 use avian3d::prelude::*;
 use std::f32::consts::FRAC_PI_4;
 
+use crate::components::base::Grounded;
 use crate::components::player::*;
 use crate::components::movement::*;
 use crate::components::input_actions;
@@ -53,4 +54,17 @@ pub fn apply_movement(
     velocity.z = -velocity.z;
 
     linear_velocity.0 += flat_rotation * velocity * **movement_acceleration;
+}
+
+
+pub fn apply_jump(
+    p_action: On<Fire<input_actions::Jump>>,
+    mut p_controllers: Query<(&mut LinearVelocity, &JumpImpulse, Has<Grounded>), With<Player>>,
+) {
+    // TODO properly manage unwrap errors ?
+    let (mut velocity, jump_impulse, is_grounded) = p_controllers.get_mut(p_action.context).unwrap();
+
+    if is_grounded {
+        velocity.y = **jump_impulse;
+    }
 }

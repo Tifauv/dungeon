@@ -12,6 +12,10 @@ pub struct LookAround;
 
 #[derive(InputAction)]
 #[action_output(bool)]
+pub struct Jump;
+
+#[derive(InputAction)]
+#[action_output(bool)]
 pub struct CaptureCursor;
 
 #[derive(InputAction)]

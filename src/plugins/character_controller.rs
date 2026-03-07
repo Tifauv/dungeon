@@ -12,6 +12,7 @@ impl Plugin for CharacterControllerPlugin {
         p_app
             .add_observer(apply_rotation)
             .add_observer(apply_movement)
+            .add_observer(apply_jump)
             .add_systems(
                 Update,
                 (
