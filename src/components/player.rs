@@ -98,8 +98,8 @@ impl PlayerBundleBuilder {
                     Action::<input_actions::LookAround>::new(),
                     DeltaScale::default(),
                     Bindings::spawn((
-                        Spawn((Binding::mouse_motion(), Negate::all())),
-                        Axial::right_stick().with((Scale::splat(100.0), Negate::x())),
+                        Spawn((Binding::mouse_motion(), Scale::splat(25.0), Negate::all())),
+                        Axial::right_stick().with((Scale::new(Vec3::new(150.0, 100.0, 0.0)), Negate::x())),
                     )),
                 ),
                 (
