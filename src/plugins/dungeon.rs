@@ -23,13 +23,8 @@ impl Plugin for DungeonPlugin {
             .add_observer(observers::input::capture_cursor)
             .add_observer(observers::input::release_cursor)
             .add_systems(Startup, (
-                state::level00::spawn_map,
-                state::level00::spawn_player,
-                // Those are for debug only !
-                /*
-                *state::level00::spawn_axis,
-                *state::level00::spawn_global_light,
-                */
+                state::level00::setup,
+                /*state::level00::setup_debug,*/
             ))
             // Disable mouse actions when hovering a UI component
             .add_systems(PreUpdate, systems::input::disable_mouse.before(EnhancedInputSystems::Update))

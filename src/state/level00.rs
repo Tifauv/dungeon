@@ -9,10 +9,30 @@ use crate::components::player::*;
 use crate::components::torch::*;
 
 
-pub fn spawn_map(
+pub fn setup(
     mut p_commands : Commands,
     mut p_meshes   : ResMut<Assets<Mesh>>,
-    mut p_materials: ResMut<Assets<StandardMaterial>>
+    mut p_materials: ResMut<Assets<StandardMaterial>>,
+) {
+    spawn_map(p_commands, p_meshes, p_materials);
+    spawn_player(p_commands, p_meshes, p_materials);
+}
+
+
+pub fn setup_debug(
+    mut p_commands : Commands,
+    mut p_meshes   : ResMut<Assets<Mesh>>,
+    mut p_materials: ResMut<Assets<StandardMaterial>>,
+) {
+    spawn_axis(p_commands, p_meshes, p_materials);
+    spawn_global_light(p_commands);
+}
+
+
+fn spawn_map(
+    mut p_commands : Commands,
+    mut p_meshes   : ResMut<Assets<Mesh>>,
+    mut p_materials: ResMut<Assets<StandardMaterial>>,
 ) {
     // Ground
     p_commands.spawn(GroundBundle::builder()
@@ -265,7 +285,11 @@ pub fn spawn_map(
 }
 
 
-pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>, mut p_materials: ResMut<Assets<StandardMaterial>>) {
+fn spawn_player(
+    mut p_commands : Commands,
+    mut p_meshes   : ResMut<Assets<Mesh>>,
+    mut p_materials: ResMut<Assets<StandardMaterial>>,
+) {
     let player = p_commands
         // Player
         .spawn(PlayerBundle::builder()
@@ -358,18 +382,11 @@ pub fn spawn_player(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>
 }
 
 
-pub fn spawn_global_light(mut p_commands: Commands) {
-    p_commands.spawn((
-        DirectionalLight{
-            shadows_enabled: true,
-            ..default()
-        },
-        Transform::from_xyz(9., 5., 11.).looking_at(Vec3::new(10., 1.5, 10.), Vec3::Y),
-    ));
-}
-
-
-pub fn spawn_axis(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>, mut p_materials: ResMut<Assets<StandardMaterial>>) {
+fn spawn_axis(
+    mut p_commands : Commands,
+    mut p_meshes   : ResMut<Assets<Mesh>>,
+    mut p_materials: ResMut<Assets<StandardMaterial>>,
+) {
     let axis_length = 5.0;
     let axis_radius = 0.1;
 
@@ -392,5 +409,16 @@ pub fn spawn_axis(mut p_commands: Commands, mut p_meshes: ResMut<Assets<Mesh>>, 
         Mesh3d(p_meshes.add(Cuboid::new(axis_radius, axis_radius, axis_length))),
         MeshMaterial3d(p_materials.add(Color::srgb_u8(0, 0, 255))),
         Transform::from_xyz(axis_radius/2., axis_radius/2., axis_length/2.),
+    ));
+}
+
+
+fn spawn_global_light(mut p_commands: Commands) {
+    p_commands.spawn((
+        DirectionalLight{
+            shadows_enabled: true,
+            ..default()
+        },
+        Transform::from_xyz(9., 5., 11.).looking_at(Vec3::new(10., 1.5, 10.), Vec3::Y),
     ));
 }
