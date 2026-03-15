@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use avian3d::prelude::*;
 use std::ops::Deref;
 
 use crate::components::player::*;
