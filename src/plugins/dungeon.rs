@@ -31,6 +31,8 @@ impl Plugin for DungeonPlugin {
                 *state::level00::spawn_global_light,
                 */
             ))
+            // Disable mouse actions when hovering a UI component
+            .add_systems(PreUpdate, systems::input::disable_mouse.before(EnhancedInputSystems::Update))
             .add_systems(Update, (
                 //systems::actions::print_started_collisions,
                 //systems::actions::print_stopped_collisions,
