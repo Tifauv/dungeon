@@ -4,6 +4,7 @@ use avian3d::prelude::*;
 use crate::components::base::*;
 use crate::components::ground::*;
 use crate::components::wall::*;
+use crate::components::door::*;
 use crate::components::player::*;
 use crate::components::torch::*;
 
@@ -33,7 +34,10 @@ pub fn spawn_map(
         .move_to(WALL_THICKNESS + 9.5, 0.)
         .move_to_y(2.)
         .build(&mut p_meshes, &mut p_materials));
-
+    // D01
+    p_commands.spawn(DoorBundle::builder()
+        .move_to(WALL_THICKNESS + 9.5, 0.25)
+        .build(&mut p_meshes, &mut p_materials));
     // W03
     p_commands.spawn(WallBundle::builder()
         .with_length(7.5)
@@ -152,6 +156,14 @@ pub fn spawn_map(
         .move_to(15., 13.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
+    // D02
+    p_commands.spawn(DoorBundle::builder()
+        .with_height(2.5)
+        .with_thickness(1.0)
+        .rotate_90()
+        .move_to(15., 12.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
 
     // W21
     p_commands.spawn(WallBundle::builder()
@@ -194,7 +206,6 @@ pub fn spawn_map(
         .build(&mut p_meshes, &mut p_materials));
     // W27
     p_commands.spawn(WallBundle::builder()
-        .with_length(3.)
         .with_length(2.)
         .rotate_90()
         .move_to(2., 11.)
@@ -207,6 +218,13 @@ pub fn spawn_map(
         .rotate_90()
         .move_to(2., 13.)
         .move_to_y(2.)
+        .with_xz_offset(WALL_THICKNESS)
+        .build(&mut p_meshes, &mut p_materials));
+    // D03
+    p_commands.spawn(DoorBundle::builder()
+        .with_length(2.)
+        .rotate_90()
+        .move_to(2.25, 13.)
         .with_xz_offset(WALL_THICKNESS)
         .build(&mut p_meshes, &mut p_materials));
     // W29
