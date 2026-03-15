@@ -14,8 +14,8 @@ pub fn setup(
     mut p_meshes   : ResMut<Assets<Mesh>>,
     mut p_materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    spawn_map(p_commands, p_meshes, p_materials);
-    spawn_player(p_commands, p_meshes, p_materials);
+    spawn_map(&mut p_commands, &mut p_meshes, &mut p_materials);
+    spawn_player(&mut p_commands, &mut p_meshes, &mut p_materials);
 }
 
 
@@ -24,15 +24,15 @@ pub fn setup_debug(
     mut p_meshes   : ResMut<Assets<Mesh>>,
     mut p_materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    spawn_axis(p_commands, p_meshes, p_materials);
-    spawn_global_light(p_commands);
+    spawn_axis(&mut p_commands, &mut p_meshes, &mut p_materials);
+    spawn_global_light(&mut p_commands);
 }
 
 
 fn spawn_map(
-    mut p_commands : Commands,
-    mut p_meshes   : ResMut<Assets<Mesh>>,
-    mut p_materials: ResMut<Assets<StandardMaterial>>,
+    p_commands : &mut Commands,
+    mut p_meshes   : &mut ResMut<Assets<Mesh>>,
+    mut p_materials: &mut ResMut<Assets<StandardMaterial>>,
 ) {
     // Ground
     p_commands.spawn(GroundBundle::builder()
@@ -286,9 +286,9 @@ fn spawn_map(
 
 
 fn spawn_player(
-    mut p_commands : Commands,
-    mut p_meshes   : ResMut<Assets<Mesh>>,
-    mut p_materials: ResMut<Assets<StandardMaterial>>,
+    p_commands : &mut Commands,
+    mut p_meshes   : &mut ResMut<Assets<Mesh>>,
+    mut p_materials: &mut ResMut<Assets<StandardMaterial>>,
 ) {
     let player = p_commands
         // Player
@@ -383,9 +383,9 @@ fn spawn_player(
 
 
 fn spawn_axis(
-    mut p_commands : Commands,
-    mut p_meshes   : ResMut<Assets<Mesh>>,
-    mut p_materials: ResMut<Assets<StandardMaterial>>,
+    p_commands : &mut Commands,
+    p_meshes   : &mut ResMut<Assets<Mesh>>,
+    p_materials: &mut ResMut<Assets<StandardMaterial>>,
 ) {
     let axis_length = 5.0;
     let axis_radius = 0.1;
@@ -413,7 +413,7 @@ fn spawn_axis(
 }
 
 
-fn spawn_global_light(mut p_commands: Commands) {
+fn spawn_global_light(p_commands: &mut Commands) {
     p_commands.spawn((
         DirectionalLight{
             shadows_enabled: true,
