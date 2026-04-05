@@ -4,7 +4,7 @@ use avian3d::prelude::*;
 use avian3d::math::Vector;
 
 use crate::character_controller::components::*;
-use crate::components::input_actions;
+use crate::input::components as actions;
 
 
 #[derive(Component)]
@@ -77,7 +77,7 @@ impl PlayerBundleBuilder {
             Name::new("Player"),
             actions!(Player[
                 (
-                    Action::<input_actions::Move>::new(),
+                    Action::<actions::Move>::new(),
                     DeadZone::default(),
                     SmoothNudge::default(),
                     DeltaScale::default(),
@@ -88,7 +88,7 @@ impl PlayerBundleBuilder {
                     )),
                 ),
                 (
-                    Action::<input_actions::LookAround>::new(),
+                    Action::<actions::LookAround>::new(),
                     DeltaScale::default(),
                     Bindings::spawn((
                         Spawn((Binding::mouse_motion(), Scale::splat(25.0), Negate::all())),
@@ -96,15 +96,15 @@ impl PlayerBundleBuilder {
                     )),
                 ),
                 (
-                    Action::<input_actions::Jump>::new(),
+                    Action::<actions::Jump>::new(),
                     bindings![KeyCode::Space, GamepadButton::South],
                 ),
                 (
-                    Action::<input_actions::CaptureCursor>::new(),
+                    Action::<actions::CaptureCursor>::new(),
                     bindings![MouseButton::Left],
                 ),
                 (
-                    Action::<input_actions::ReleaseCursor>::new(),
+                    Action::<actions::ReleaseCursor>::new(),
                     bindings![KeyCode::Escape]
                 ),
             ]),

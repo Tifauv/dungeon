@@ -7,11 +7,11 @@ use std::f32::consts::FRAC_PI_4;
 use crate::components::base::Grounded;
 use crate::components::player::*;
 use crate::components::movement::*;
-use crate::components::input_actions;
+use crate::input::components as actions;
 
 
 pub fn apply_rotation(
-    p_action: On<Fire<input_actions::LookAround>>,
+    p_action: On<Fire<actions::LookAround>>,
     mut p_controllers: Query<&mut Transform, With<Player>>,
     p_cursor: Single<&CursorOptions>,
 ) {
@@ -34,7 +34,7 @@ pub fn apply_rotation(
 
 
 pub fn apply_movement(
-    p_action: On<Fire<input_actions::Move>>,
+    p_action: On<Fire<actions::Move>>,
     mut p_controllers: Query<(
         &MovementAcceleration,
         &Transform,
@@ -58,7 +58,7 @@ pub fn apply_movement(
 
 
 pub fn apply_jump(
-    p_action: On<Fire<input_actions::Jump>>,
+    p_action: On<Fire<actions::Jump>>,
     mut p_controllers: Query<(&mut LinearVelocity, &JumpImpulse, Has<Grounded>), With<Player>>,
 ) {
     // TODO properly manage unwrap errors ?

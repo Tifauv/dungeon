@@ -5,9 +5,8 @@ use bevy_enhanced_input::prelude::*;
 use crate::components;
 use crate::state;
 use crate::systems;
-use crate::observers;
-use crate::plugins;
 use crate::character_controller;
+use crate::input;
 
 pub struct DungeonPlugin;
 
@@ -21,14 +20,14 @@ impl Plugin for DungeonPlugin {
                 character_controller::plugin::CharacterControllerPlugin,
             ))
             .add_input_context::<components::player::Player>()
-            .add_observer(observers::input::capture_cursor)
-            .add_observer(observers::input::release_cursor)
+            .add_observer(input::observers::capture_cursor)
+            .add_observer(input::observers::release_cursor)
             .add_systems(Startup, (
                 state::level00::setup,
                 /*state::level00::setup_debug,*/
             ))
             // Disable mouse actions when hovering a UI component
-            .add_systems(PreUpdate, systems::input::disable_mouse.before(EnhancedInputSystems::Update))
+            .add_systems(PreUpdate, input::systems::disable_mouse.before(EnhancedInputSystems::Update))
             .add_systems(Update, (
                 systems::ui::set_camera_viewports,
                 systems::light::flicker_torch,
