@@ -21,7 +21,6 @@ impl PlayerBundle {
 }
 
 pub struct PlayerBundleBuilder {
-    camera_sensitivity: CameraSensitivity,
     collider          : Collider,
     gravity           : Vector,
     x                 : f32,
@@ -35,7 +34,6 @@ pub struct PlayerBundleBuilder {
 impl Default for PlayerBundleBuilder {
     fn default() -> Self {
         Self {
-            camera_sensitivity: CameraSensitivity::default(),
             collider          : Collider::cuboid(1.0, 1.0, 1.0),
             gravity           : ControllerGravity::default_vector(),
             x                 : 0.,
@@ -49,11 +47,6 @@ impl Default for PlayerBundleBuilder {
 }
 
 impl PlayerBundleBuilder {
-    pub fn with_camera_sensitivity(mut self, p_camera_sensitivity: CameraSensitivity) -> Self {
-        self.camera_sensitivity = p_camera_sensitivity;
-        self
-    }
-
     pub fn with_collider(mut self, p_collider: Collider) -> Self {
         self.collider = p_collider;
         self
@@ -115,7 +108,6 @@ impl PlayerBundleBuilder {
                     bindings![KeyCode::Escape]
                 ),
             ]),
-            self.camera_sensitivity,
             CharacterControllerBundle::new(
                 self.collider,
                 self.gravity,
@@ -197,18 +189,6 @@ impl PlayerBodyBundleBuilder {
             material : MeshMaterial3d(p_materials.add(Color::srgb_u8(255, 0, 0))),
             transform: Transform::from_xyz(self.x, self.y, self.z),
         }
-    }
-}
-
-
-#[derive(Component, Deref, DerefMut)]
-pub struct CameraSensitivity(Vec2);
-
-impl Default for CameraSensitivity {
-    fn default() -> Self {
-        Self(
-            Vec2::new(2.0, 1.2),
-        )
     }
 }
 
