@@ -137,7 +137,7 @@ impl DoorBundleBuilder {
             marker   : Door,
             name     : Name::new("Door"),
             mesh     : Mesh3d(p_meshes.add(Cuboid::new(self.length, self.height, self.thickness))),
-            material : MeshMaterial3d(p_materials.add(Color::srgb_u8(200, 217, 234))),
+            material : MeshMaterial3d(p_materials.add(Color::srgb_u8(253, 188, 255))),
             body     : RigidBody::Static,
             collider : ColliderConstructor::Cuboid {
                 x_length: self.length,
