@@ -319,8 +319,8 @@ fn spawn_player(
             Camera3d::default(),
             Name::new("Player camera"),
             Projection::from(PerspectiveProjection {
-               fov: 90.0_f32.to_radians(),
-               ..default()
+                fov: 90.0_f32.to_radians(),
+                ..default()
             }),
             Transform::from_xyz(0., 0.775, 0.),
             Camera {
