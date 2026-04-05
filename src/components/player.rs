@@ -3,7 +3,7 @@ use bevy_enhanced_input::prelude::*;
 use avian3d::prelude::*;
 use avian3d::math::Vector;
 
-use crate::components::character_controller::*;
+use crate::character_controller::components::*;
 use crate::components::input_actions;
 
 

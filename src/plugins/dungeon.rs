@@ -7,6 +7,7 @@ use crate::state;
 use crate::systems;
 use crate::observers;
 use crate::plugins;
+use crate::character_controller;
 
 pub struct DungeonPlugin;
 
@@ -17,7 +18,7 @@ impl Plugin for DungeonPlugin {
             .add_plugins((
                 PhysicsPlugins::default(),
                 EnhancedInputPlugin,
-                plugins::character_controller::CharacterControllerPlugin,
+                character_controller::plugin::CharacterControllerPlugin,
             ))
             .add_input_context::<components::player::Player>()
             .add_observer(observers::input::capture_cursor)

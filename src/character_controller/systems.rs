@@ -4,7 +4,7 @@ use avian3d::math::*;
 
 use crate::components::base::*;
 use crate::components::movement::*;
-use crate::components::character_controller::*;
+use crate::character_controller::components::*;
 
 
 
@@ -61,16 +61,16 @@ pub fn kinematic_controller_collisions(
     p_bodies: Query<&RigidBody>,
     p_collider_rbs: Query<&ColliderOf, Without<Sensor>>,
     mut p_controllers: Query<
-       (&mut Position, &mut LinearVelocity, Option<&MaxSlopeAngle>),
-       (With<RigidBody>, With<CharacterController>)
-    >,
-    p_time: Res<Time>,
+    (&mut Position, &mut LinearVelocity, Option<&MaxSlopeAngle>),
+                                       (With<RigidBody>, With<CharacterController>)
+                                       >,
+                                       p_time: Res<Time>,
 ) {
     // Iterate through collisions and move the kinematic body to resolve penetration
     for contacts in p_collisions.iter() {
         // Get the rigid body entities of the colliders (could be children)
         let Ok([&ColliderOf { body: rb1 }, &ColliderOf { body: rb2 }]) =
-            p_collider_rbs.get_many([contacts.collider1, contacts.collider2])
+        p_collider_rbs.get_many([contacts.collider1, contacts.collider2])
         else {
             continue;
         };
@@ -83,21 +83,21 @@ pub fn kinematic_controller_collisions(
         let is_other_dynamic: bool;
 
         let (mut position, mut linear_velocity, max_slope_angle) =
-            if let Ok(character) = p_controllers.get_mut(rb1) {
-                is_first = true;
-                character_rb = *p_bodies.get(rb1).unwrap();
-                is_other_dynamic = p_bodies.get(rb2).is_ok_and(|rb| rb.is_dynamic());
-                character
-            }
-            else if let Ok(character) = p_controllers.get_mut(rb2) {
-                is_first = false;
-                character_rb = *p_bodies.get(rb2).unwrap();
-                is_other_dynamic = p_bodies.get(rb1).is_ok_and(|rb| rb.is_dynamic());
-                character
-            }
-            else {
-                continue;
-            };
+        if let Ok(character) = p_controllers.get_mut(rb1) {
+            is_first = true;
+            character_rb = *p_bodies.get(rb1).unwrap();
+            is_other_dynamic = p_bodies.get(rb2).is_ok_and(|rb| rb.is_dynamic());
+            character
+        }
+        else if let Ok(character) = p_controllers.get_mut(rb2) {
+            is_first = false;
+            character_rb = *p_bodies.get(rb2).unwrap();
+            is_other_dynamic = p_bodies.get(rb1).is_ok_and(|rb| rb.is_dynamic());
+            character
+        }
+        else {
+            continue;
+        };
 
         // This system only handles collision response for kinematic character controllers.
         if !character_rb.is_kinematic() {

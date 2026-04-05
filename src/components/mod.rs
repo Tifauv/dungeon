@@ -5,5 +5,4 @@ pub mod door;
 pub mod torch;
 pub mod player;
 pub mod movement;
-pub mod character_controller;
 pub mod input_actions;

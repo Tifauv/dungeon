@@ -3,6 +3,7 @@ mod state;
 mod systems;
 mod observers;
 mod plugins;
+mod character_controller;
 
 use bevy::prelude::*;
 use bevy_inspector_egui::{bevy_egui::EguiPlugin, quick::WorldInspectorPlugin};

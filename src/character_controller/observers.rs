@@ -40,7 +40,7 @@ pub fn apply_movement(
         &Transform,
         &mut LinearVelocity),
         With<Player>
-    >,
+        >,
 ) {
     // TODO properly manage unwrap errors ?
     let (movement_acceleration, transform, mut linear_velocity) = p_controllers.get_mut(p_action.context).unwrap();
