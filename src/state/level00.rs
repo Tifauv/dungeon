@@ -4,7 +4,7 @@ use avian3d::prelude::*;
 use crate::components::base::*;
 use crate::components::ground::*;
 use crate::components::player::*;
-use crate::components::torch::*;
+use crate::objects::torch::components::*;
 use crate::objects::door::components::*;
 use crate::objects::wall::components::*;
 

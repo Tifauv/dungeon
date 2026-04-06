@@ -1,5 +1,7 @@
 use bevy::prelude::*;
-use avian3d::prelude::*;
+//use avian3d::prelude::*;
+
+use crate::light::components::Flickering;
 
 
 pub const TORCH_INTENSITY_BASE : f32 = 2800.;
@@ -10,22 +12,20 @@ pub const TORCH_RADIUS         : f32 = 0.05;
 
 
 #[derive(Component)]
-pub struct Torch {
-    pub base_intensity: f32,
-    pub intensity_delta: f32,
-}
+pub struct Torch;
 
 
 #[derive(Bundle)]
 pub struct TorchBundle {
-    marker   : Torch,
-    name     : Name,
-    mesh     : Mesh3d,
-    material : MeshMaterial3d<StandardMaterial>,
-    light    : PointLight,
-    /*    body     : RigidBody,
-    collider : Collider,*/
-    transform: Transform,
+    marker    : Torch,
+    name      : Name,
+    mesh      : Mesh3d,
+    material  : MeshMaterial3d<StandardMaterial>,
+    light     : PointLight,
+    flickering: Flickering,
+    /*    body      : RigidBody,
+     *    collider  : Collider,*/
+    transform : Transform,
 }
 
 impl TorchBundle {
@@ -36,10 +36,10 @@ impl TorchBundle {
 
 
 pub struct TorchBundleBuilder {
-    intensity      : f32,
-    intensity_delta: f32,
     light_range    : f32,
     light_radius   : f32,
+    intensity      : f32,
+    intensity_delta: f32,
     radius         : f32,
     x              : f32,
     y              : f32,
@@ -49,10 +49,10 @@ pub struct TorchBundleBuilder {
 impl Default for TorchBundleBuilder {
     fn default() -> Self {
         Self {
-            intensity      : TORCH_INTENSITY_BASE,
-            intensity_delta: TORCH_INTENSITY_DELTA,
             light_range    : TORCH_LIGHT_RANGE,
             light_radius   : TORCH_LIGHT_RADIUS,
+            intensity      : TORCH_INTENSITY_BASE,
+            intensity_delta: TORCH_INTENSITY_DELTA,
             radius         : TORCH_RADIUS,
             x: 0.,
             y: 0.,
@@ -62,15 +62,15 @@ impl Default for TorchBundleBuilder {
 }
 
 impl TorchBundleBuilder {
-    pub fn with_intensity(mut self, p_intensity: f32, p_delta: f32) -> Self {
-        self.intensity       = p_intensity;
-        self.intensity_delta = p_delta;
-        self
-    }
-
     pub fn with_light_range(mut self, p_range: f32, p_radius: f32) -> Self {
         self.light_range = p_range;
         self.light_radius = p_radius;
+        self
+    }
+
+    pub fn with_intensity(mut self, p_intensity: f32, p_delta: f32) -> Self {
+        self.intensity       = p_intensity;
+        self.intensity_delta = p_delta;
         self
     }
 
@@ -92,18 +92,15 @@ impl TorchBundleBuilder {
         p_materials: &mut ResMut<Assets<StandardMaterial>>
     ) -> TorchBundle {
         TorchBundle {
-            marker   : Torch {
-                base_intensity : self.intensity,
-                intensity_delta: self.intensity_delta,
-            },
-            name     : Name::new("Torch"),
-            mesh     : Mesh3d(p_meshes.add(Sphere::new(self.radius))),
-            material : MeshMaterial3d(p_materials.add(StandardMaterial {
+            marker    : Torch,
+            name      : Name::new("Torch"),
+            mesh      : Mesh3d(p_meshes.add(Sphere::new(self.radius))),
+            material  : MeshMaterial3d(p_materials.add(StandardMaterial {
                 base_color: Color::srgba_u8(255, 170, 0, 60),
                 unlit: true,
                 ..default()
             })),
-            light    : PointLight {
+            light     : PointLight {
                 color          : Color::srgb_u8(255, 170, 0),
                 intensity      : self.intensity,
                 range          : self.light_range,
@@ -111,9 +108,13 @@ impl TorchBundleBuilder {
                 shadows_enabled: true,
                 ..default()
             },
-            /*body     : RigidBody::Static,
-            collider : Collider::sphere(self.radius),*/
-            transform: Transform::from_xyz(self.x, self.y, self.z),
+            flickering: Flickering {
+                base_intensity : self.intensity,
+                intensity_delta: self.intensity_delta,
+            },
+            /*body      : RigidBody::Static,
+             *            collider : Collider::sphere(self.radius),*/
+            transform : Transform::from_xyz(self.x, self.y, self.z),
         }
     }
 }
