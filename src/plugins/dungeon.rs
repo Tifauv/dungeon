@@ -5,8 +5,8 @@ use bevy_enhanced_input::prelude::*;
 use crate::components;
 use crate::state;
 use crate::systems;
-use crate::character_controller;
 use crate::input;
+use crate::character_controller;
 
 pub struct DungeonPlugin;
 

@@ -2,8 +2,8 @@ mod components;
 mod state;
 mod systems;
 mod plugins;
-mod character_controller;
 mod input;
+mod character_controller;
 mod objects;
 
 use bevy::prelude::*;
