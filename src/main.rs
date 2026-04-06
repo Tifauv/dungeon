@@ -4,6 +4,7 @@ mod systems;
 mod plugins;
 mod input;
 mod character_controller;
+mod light;
 mod objects;
 mod ui;
 

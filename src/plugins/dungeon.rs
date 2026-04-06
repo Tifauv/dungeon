@@ -7,6 +7,7 @@ use crate::state;
 use crate::systems;
 use crate::input;
 use crate::character_controller;
+use crate::light;
 use crate::ui;
 
 pub struct DungeonPlugin;
@@ -30,8 +31,8 @@ impl Plugin for DungeonPlugin {
             // Disable mouse actions when hovering a UI component
             .add_systems(PreUpdate, input::systems::disable_mouse.before(EnhancedInputSystems::Update))
             .add_systems(Update, (
-                systems::light::flicker_torch,
                 ui::systems::set_camera_viewports,
+                light::systems::flicker,
                 systems::actions::move_top_camera,
             ));
     }
