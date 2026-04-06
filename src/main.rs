@@ -5,6 +5,7 @@ mod plugins;
 mod input;
 mod character_controller;
 mod objects;
+mod ui;
 
 use bevy::prelude::*;
 use bevy_inspector_egui::{bevy_egui::EguiPlugin, quick::WorldInspectorPlugin};

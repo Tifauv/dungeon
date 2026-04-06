@@ -1,7 +1,9 @@
 use bevy::prelude::*;
 use bevy::camera::Viewport;
 use bevy::window::WindowResized;
+
 use crate::components::base::*;
+
 
 pub fn set_camera_viewports(
     p_windows: Query<&Window>,
@@ -18,8 +20,8 @@ pub fn set_camera_viewports(
             let size = window.physical_size().as_vec2() * view.size;
             camera.viewport = Some(Viewport {
                 physical_position: view.pos * size.as_uvec2(),
-                physical_size: size.as_uvec2(),
-                ..default()
+                                   physical_size: size.as_uvec2(),
+                                   ..default()
             });
         }
     }
