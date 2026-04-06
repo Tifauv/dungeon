@@ -3,10 +3,10 @@ use avian3d::prelude::*;
 
 use crate::components::base::*;
 use crate::components::ground::*;
-use crate::components::wall::*;
 use crate::components::door::*;
 use crate::components::player::*;
 use crate::components::torch::*;
+use crate::objects::wall::components::*;
 
 
 pub fn setup(
