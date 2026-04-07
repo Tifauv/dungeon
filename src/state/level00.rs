@@ -2,10 +2,10 @@ use bevy::prelude::*;
 use avian3d::prelude::*;
 
 use crate::components::base::*;
-use crate::components::ground::*;
 use crate::components::player::*;
-use crate::objects::torch::components::*;
 use crate::objects::door::components::*;
+use crate::objects::ground::components::*;
+use crate::objects::torch::components::*;
 use crate::objects::wall::components::*;
 
 
