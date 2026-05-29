@@ -15,7 +15,7 @@ PKGS="cargo
 exists=$(toolbox list --containers | awk '$2 == "dev-rust"' | wc -l)
 if [[ $exists -eq 0 ]]
 then # Create the toolbox container
-    toolbox create "${NAME}" --distro fedora --release 43
+    toolbox create "${NAME}" --distro fedora --release 44
 fi
 
 # Update and initialize the container
